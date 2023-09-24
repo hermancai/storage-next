@@ -30,7 +30,7 @@ export default function Navbar() {
       <div className="flex gap-4">
         {session !== null ? (
           <>
-            <p>Hello, {session.user.email}</p>
+            <p>Hello, {session.user.user_metadata.name}</p>
             <button onClick={handleSignOut}>Sign Out</button>
           </>
         ) : (
