@@ -1,27 +1,52 @@
 "use client";
 
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { ChangeEvent, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
+
+type ImageType = {
+    s3_id: string;
+    name: string;
+};
 
 export default function HomePage() {
     const supabase = createClientComponentClient();
     const [fileToUpload, setFileToUpload] = useState<File | null>(null);
     const [currentFolder, setCurrentFolder] = useState<number>(0);
+    const [currentImages, setCurrentImages] = useState<ImageType[]>([]);
+    const inputRef = useRef<HTMLInputElement>(null);
 
-    // Get user's root folder
+    // Get user's root folder on first page load
     useEffect(() => {
         const getRootFolder = async () => {
             const { data, error } = await supabase
                 .from("folder")
                 .select("id")
                 .filter("parent", "is", "null");
-            if (error) {
+            if (error || data.length === 0) {
                 return console.log("Fetching root folder failed.");
             }
             setCurrentFolder(data[0]["id"]);
         };
+
         getRootFolder();
     }, []);
+
+    // Get images in current folder
+    useEffect(() => {
+        if (currentFolder === 0) return;
+        const getRootImages = async () => {
+            const { data, error } = await supabase
+                .from("image")
+                .select("s3_id, name")
+                .eq("folder", currentFolder);
+            if (error) {
+                return console.log(error);
+            }
+            setCurrentImages(data);
+        };
+
+        getRootImages();
+    }, [currentFolder]);
 
     const uploadImage = async () => {
         if (fileToUpload === null) return;
@@ -57,17 +82,29 @@ export default function HomePage() {
         }
 
         // Update supabase
-        const { error } = await supabase.from("image").insert({
-            s3_id: urlResponse.s3_id,
-            name: fileToUpload.name,
-            folder: currentFolder,
-        });
+        const { data, error } = await supabase
+            .from("image")
+            .insert({
+                s3_id: urlResponse.s3_id,
+                name: fileToUpload.name,
+                folder: currentFolder,
+            })
+            .select("s3_id");
         if (error) {
-            console.log(error);
+            return console.log(error);
+        }
+
+        // Show image on current page
+        setCurrentImages([
+            ...currentImages,
+            { s3_id: data[0].s3_id, name: fileToUpload.name },
+        ]);
+        if (inputRef.current) {
+            inputRef.current.value = "";
         }
     };
 
-    const handleFileSubmit = async (e: ChangeEvent<HTMLInputElement>) => {
+    const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
             return setFileToUpload(e.target.files[0]);
         }
@@ -81,13 +118,26 @@ export default function HomePage() {
             <div>
                 <label htmlFor="image-upload">Choose Image</label>
                 <input
+                    ref={inputRef}
                     id="image-upload"
                     type="file"
                     accept=".jpg,.jpeg,.png"
-                    onChange={(e) => handleFileSubmit(e)}
+                    onChange={(e) => handleFileChange(e)}
                 />
             </div>
-            <button onClick={uploadImage}>Request upload URL</button>
+            <button onClick={uploadImage}>UPLOAD</button>
+            <div>
+                <p>Images in this folder:</p>
+                {currentImages.map((image) => {
+                    return (
+                        <div key={image.s3_id}>
+                            {image.name}
+                            <br />
+                            {image.s3_id}
+                        </div>
+                    );
+                })}
+            </div>
         </div>
     );
 }
