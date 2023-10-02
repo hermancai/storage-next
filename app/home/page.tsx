@@ -2,10 +2,12 @@
 
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
+import Image from "next/image";
 
 type ImageType = {
     s3_id: string;
     name: string;
+    presignedUrl: string;
 };
 
 export default function HomePage() {
@@ -34,18 +36,25 @@ export default function HomePage() {
     // Get images in current folder
     useEffect(() => {
         if (currentFolder === 0) return;
-        const getRootImages = async () => {
-            const { data, error } = await supabase
-                .from("image")
-                .select("s3_id, name")
-                .eq("folder", currentFolder);
-            if (error) {
-                return console.log(error);
+
+        const getCurrentImages = async () => {
+            const getImagesResponse = await fetch("/s3/getImages", {
+                method: "POST",
+                headers: {
+                    Accept: "application/json",
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ folderId: currentFolder }),
+            });
+            const getImagesRes = await getImagesResponse.json();
+            if (getImagesRes.error) {
+                setCurrentImages([]);
+                return console.log(getImagesRes.error);
             }
-            setCurrentImages(data);
+            setCurrentImages(getImagesRes.images);
         };
 
-        getRootImages();
+        getCurrentImages();
     }, [currentFolder]);
 
     const uploadImage = async () => {
@@ -78,11 +87,11 @@ export default function HomePage() {
             body: formData,
         });
         if (!s3Res.ok) {
-            return console.log(s3Res.status);
+            return console.log(s3Res);
         }
 
         // Update supabase
-        const { data, error } = await supabase
+        const insertResponse = await supabase
             .from("image")
             .insert({
                 s3_id: urlResponse.s3_id,
@@ -90,15 +99,37 @@ export default function HomePage() {
                 folder: currentFolder,
             })
             .select("s3_id");
-        if (error) {
-            return console.log(error);
+        if (insertResponse.error) {
+            return console.log(insertResponse.error);
         }
 
         // Show image on current page
+        const getThumbResponse = await fetch("/s3/getThumb", {
+            method: "POST",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                s3_id: insertResponse.data[0].s3_id,
+                name: fileToUpload.name,
+            }),
+        });
+        const getThumbRes = await getThumbResponse.json();
+        if (getThumbRes.error) {
+            return console.log(getThumbRes.error);
+        }
+
         setCurrentImages([
             ...currentImages,
-            { s3_id: data[0].s3_id, name: fileToUpload.name },
+            {
+                s3_id: insertResponse.data[0].s3_id,
+                name: fileToUpload.name,
+                presignedUrl: getThumbRes.presignedUrl,
+            },
         ]);
+
+        // Reset file input
         if (inputRef.current) {
             inputRef.current.value = "";
         }
@@ -134,6 +165,13 @@ export default function HomePage() {
                             {image.name}
                             <br />
                             {image.s3_id}
+                            <br />
+                            <Image
+                                src={image.presignedUrl}
+                                alt={image.name}
+                                height={100}
+                                width={100}
+                            />
                         </div>
                     );
                 })}
