@@ -142,6 +142,27 @@ export default function HomePage() {
         setFileToUpload(null);
     };
 
+    const deleteImage = async (s3_id: string) => {
+        const deleteResponse = await fetch("/s3/deleteImage", {
+            method: "POST",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                s3_id,
+            }),
+        });
+        const deleteRes = await deleteResponse.json();
+        if (deleteRes.error) {
+            return console.log(deleteRes.error);
+        }
+
+        setCurrentImages((prevState) =>
+            prevState.filter((image) => image.s3_id !== s3_id)
+        );
+    };
+
     return (
         <div>
             <p>Home page (logged in)</p>
@@ -172,6 +193,9 @@ export default function HomePage() {
                                 height={100}
                                 width={100}
                             />
+                            <button onClick={() => deleteImage(image.s3_id)}>
+                                DELETE IMAGE
+                            </button>
                         </div>
                     );
                 })}
