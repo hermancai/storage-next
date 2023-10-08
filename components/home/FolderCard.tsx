@@ -1,5 +1,6 @@
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Dispatch, SetStateAction } from "react";
+import Link from "next/link";
 
 type FolderType = {
     name: string;
@@ -32,7 +33,7 @@ export default function FolderCard({
 
     return (
         <div>
-            <p>{folder.name}</p>
+            <Link href={`/home/folder/${folder.id}`}>{folder.name}</Link>
             <button onClick={deleteFolder}>DELETE FOLDER</button>
         </div>
     );
