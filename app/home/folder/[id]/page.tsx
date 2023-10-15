@@ -7,6 +7,7 @@ import ImageUpload from "@/components/home/ImageUpload";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import useRedirectIfUnauthorized from "@/hooks/useRedirectIfUnauthorized";
 
 type ImageType = {
     s3_id: string;
@@ -21,6 +22,8 @@ type FolderType = {
 };
 
 export default function FolderPage({ params }: { params: { id: string } }) {
+    const [loading, setLoading] = useState(true);
+    useRedirectIfUnauthorized(setLoading);
     const supabase = createClientComponentClient();
 
     const [folderPath, setFolderPath] = useState<FolderType[]>([]);
@@ -30,6 +33,7 @@ export default function FolderPage({ params }: { params: { id: string } }) {
     // Get folder hierarchy on page load
     useEffect(() => {
         const getFolderPath = async () => {
+            setLoading(true);
             const { data, error } = await supabase.rpc("get_folder_path", {
                 f_id: params.id,
             });
@@ -37,10 +41,11 @@ export default function FolderPage({ params }: { params: { id: string } }) {
                 return console.log(error);
             }
             setFolderPath(data);
+            setLoading(false);
         };
 
         getFolderPath();
-    }, []);
+    }, [supabase, params.id]);
 
     // Get images in current folder
     useEffect(() => {
@@ -78,20 +83,23 @@ export default function FolderPage({ params }: { params: { id: string } }) {
 
         getCurrentImages();
         getNestedFolders();
-    }, [folderPath]);
+    }, [folderPath, supabase]);
 
-    return folderPath.length === 0 ? (
-        <div>loading</div>
-    ) : (
+    if (loading || folderPath.length === 0) {
+        return <div>LOADING</div>;
+    }
+
+    return (
         <div>
             <div className="flex flex-row gap-4">
                 PATH:
                 {folderPath.map((folder, i, arr) => {
-                    if (i === 0) {
-                        return <p>{folder.name}</p>;
-                    }
                     if (arr.length - 1 === i) {
-                        return <Link href="/home">Home</Link>;
+                        return (
+                            <Link key={folder.id} href="/home">
+                                Home
+                            </Link>
+                        );
                     }
                     return (
                         <Link

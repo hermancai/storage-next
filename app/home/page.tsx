@@ -1,11 +1,12 @@
 "use client";
 
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import ImageUpload from "@/components/home/ImageUpload";
 import ImageCard from "@/components/home/ImageCard";
 import FolderCard from "@/components/home/FolderCard";
 import FolderCreate from "@/components/home/FolderCreate";
+import useRedirectIfUnauthorized from "@/hooks/useRedirectIfUnauthorized";
 
 type ImageType = {
     s3_id: string;
@@ -19,6 +20,8 @@ type FolderType = {
 };
 
 export default function HomePage() {
+    const [loading, setLoading] = useState(true);
+    useRedirectIfUnauthorized(setLoading);
     const supabase = createClientComponentClient();
 
     const [currentFolder, setCurrentFolder] = useState("");
@@ -33,13 +36,12 @@ export default function HomePage() {
                 .select("id")
                 .filter("parent", "is", "null");
             if (error || data.length === 0) {
-                return console.log("Fetching root folder failed.");
+                return;
             }
             setCurrentFolder(data[0]["id"]);
         };
-
         getRootFolder();
-    }, []);
+    }, [supabase]);
 
     // Get images in current folder
     useEffect(() => {
@@ -77,7 +79,11 @@ export default function HomePage() {
 
         getCurrentImages();
         getNestedFolders();
-    }, [currentFolder]);
+    }, [currentFolder, supabase]);
+
+    if (loading) {
+        return <div>LOADING</div>;
+    }
 
     return (
         <div>
