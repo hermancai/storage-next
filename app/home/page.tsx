@@ -6,7 +6,6 @@ import ImageUpload from "@/components/home/ImageUpload";
 import ImageCard from "@/components/home/ImageCard";
 import FolderCard from "@/components/home/FolderCard";
 import FolderCreate from "@/components/home/FolderCreate";
-import useRedirectIfUnauthorized from "@/hooks/useRedirectIfUnauthorized";
 
 type ImageType = {
     s3_id: string;
@@ -20,8 +19,6 @@ type FolderType = {
 };
 
 export default function HomePage() {
-    const [loading, setLoading] = useState(true);
-    useRedirectIfUnauthorized(setLoading);
     const supabase = createClientComponentClient();
 
     const [currentFolder, setCurrentFolder] = useState("");
@@ -81,7 +78,7 @@ export default function HomePage() {
         getNestedFolders();
     }, [currentFolder, supabase]);
 
-    if (loading) {
+    if (currentFolder === "") {
         return <div>LOADING</div>;
     }
 

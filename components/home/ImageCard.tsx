@@ -1,5 +1,7 @@
+"use client";
+
 import Image from "next/image";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 
 type ImageType = {
     s3_id: string;
@@ -13,6 +15,8 @@ type ImageCardType = {
 };
 
 export default function ImageCard({ image, setCurrentImages }: ImageCardType) {
+    const [newName, setNewName] = useState("");
+
     const deleteImage = async (s3_id: string) => {
         const deleteResponse = await fetch("/api/deleteImage", {
             method: "POST",
@@ -34,6 +38,14 @@ export default function ImageCard({ image, setCurrentImages }: ImageCardType) {
         );
     };
 
+    const renameImage = async () => {
+        if (!newName) {
+            return;
+        }
+
+        // TODO call supabase. set new image list
+    };
+
     return (
         <div key={image.s3_id}>
             {image.name}
@@ -46,6 +58,16 @@ export default function ImageCard({ image, setCurrentImages }: ImageCardType) {
                 height={100}
                 width={100}
             />
+            <div>
+                <label htmlFor="rename-image">Rename Image</label>
+                <input
+                    id="rename-image"
+                    type="text"
+                    value={newName}
+                    onChange={(e) => setNewName(e.target.value)}
+                />
+                <button onClick={renameImage}>RENAME IMAGE</button>
+            </div>
             <button onClick={() => deleteImage(image.s3_id)}>
                 DELETE IMAGE
             </button>

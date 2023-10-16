@@ -7,7 +7,6 @@ import ImageUpload from "@/components/home/ImageUpload";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import useRedirectIfUnauthorized from "@/hooks/useRedirectIfUnauthorized";
 
 type ImageType = {
     s3_id: string;
@@ -22,8 +21,6 @@ type FolderType = {
 };
 
 export default function FolderPage({ params }: { params: { id: string } }) {
-    const [loading, setLoading] = useState(true);
-    useRedirectIfUnauthorized(setLoading);
     const supabase = createClientComponentClient();
 
     const [folderPath, setFolderPath] = useState<FolderType[]>([]);
@@ -33,7 +30,7 @@ export default function FolderPage({ params }: { params: { id: string } }) {
     // Get folder hierarchy on page load
     useEffect(() => {
         const getFolderPath = async () => {
-            setLoading(true);
+            // setLoading(true);
             const { data, error } = await supabase.rpc("get_folder_path", {
                 f_id: params.id,
             });
@@ -41,7 +38,7 @@ export default function FolderPage({ params }: { params: { id: string } }) {
                 return console.log(error);
             }
             setFolderPath(data);
-            setLoading(false);
+            // setLoading(false);
         };
 
         getFolderPath();
@@ -85,7 +82,7 @@ export default function FolderPage({ params }: { params: { id: string } }) {
         getNestedFolders();
     }, [folderPath, supabase]);
 
-    if (loading || folderPath.length === 0) {
+    if (folderPath.length === 0) {
         return <div>LOADING</div>;
     }
 

@@ -3,12 +3,8 @@
 import { useRouter } from "next/navigation";
 import { useState, FormEvent } from "react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import useRedirectIfAuthorized from "@/hooks/useRedirectIfAuthorized";
 
 export default function SignupPage() {
-    const [loading, setLoading] = useState(true);
-    useRedirectIfAuthorized(setLoading);
-
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [name, setName] = useState("");
@@ -39,10 +35,6 @@ export default function SignupPage() {
         }
         router.refresh();
     };
-
-    if (loading) {
-        return <div>LOADING</div>;
-    }
 
     return (
         <>

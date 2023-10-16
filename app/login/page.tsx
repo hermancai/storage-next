@@ -3,11 +3,8 @@
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/navigation";
 import { useState, FormEvent } from "react";
-import useRedirectIfAuthorized from "@/hooks/useRedirectIfAuthorized";
 
 export default function LoginPage() {
-    const [loading, setLoading] = useState(true);
-    useRedirectIfAuthorized(setLoading);
     const supabase = createClientComponentClient();
     const router = useRouter();
 
@@ -30,10 +27,6 @@ export default function LoginPage() {
         }
         router.push("/home");
     };
-
-    if (loading) {
-        return <div>LOADING</div>;
-    }
 
     return (
         <div>

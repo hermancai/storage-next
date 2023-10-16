@@ -3,11 +3,8 @@
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useState } from "react";
 import useGetUser from "@/hooks/useGetUser";
-import useRedirectIfUnauthorized from "@/hooks/useRedirectIfUnauthorized";
 
 export default function AccountPage() {
-    const [loading, setLoading] = useState(true);
-    useRedirectIfUnauthorized(setLoading);
     const supabase = createClientComponentClient();
     const user = useGetUser();
 
