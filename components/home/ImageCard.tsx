@@ -1,5 +1,6 @@
 "use client";
 
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import Image from "next/image";
 import { Dispatch, SetStateAction, useState } from "react";
 
@@ -43,7 +44,32 @@ export default function ImageCard({ image, setCurrentImages }: ImageCardType) {
             return;
         }
 
-        // TODO call supabase. set new image list
+        const newFileName =
+            newName +
+            image.name.substring(
+                image.name.lastIndexOf("."),
+                image.name.length
+            );
+
+        const supabase = createClientComponentClient();
+        const { error } = await supabase
+            .from("image")
+            .update({ name: newFileName })
+            .eq("s3_id", image.s3_id);
+        if (error) {
+            return console.log(error);
+        }
+
+        setCurrentImages((prevState) => {
+            const newList = [...prevState];
+            for (let i = 0; i < newList.length; i++) {
+                if (newList[i].s3_id === image.s3_id) {
+                    newList[i].name = newFileName;
+                    break;
+                }
+            }
+            return newList;
+        });
     };
 
     return (
