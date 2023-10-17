@@ -60,6 +60,7 @@ export default function ImageCard({ image, setCurrentImages }: ImageCardType) {
             return console.log(error);
         }
 
+        setNewName("");
         setCurrentImages((prevState) => {
             const newList = [...prevState];
             for (let i = 0; i < newList.length; i++) {

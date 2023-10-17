@@ -22,12 +22,6 @@ export async function POST(req: Request) {
         return NextResponse.json({ error: "User session not found." });
     }
 
-    // Remove cookie
-    const signOutResponse = await routeSupabase.auth.signOut();
-    if (signOutResponse.error) {
-        return NextResponse.json({ error: signOutResponse.error });
-    }
-
     // Delete all images belonging to user in S3
     try {
         await deleteAllImages(
@@ -38,6 +32,12 @@ export async function POST(req: Request) {
         return NextResponse.json({ error: err });
     }
 
+    // Remove cookie
+    const signOutResponse = await routeSupabase.auth.signOut();
+    if (signOutResponse.error) {
+        return NextResponse.json({ error: signOutResponse.error });
+    }
+
     // Delete user using admin perms
     const { data, error } = await adminSupabase.auth.admin.deleteUser(
         sessionResponse.data.session.user.id
@@ -46,7 +46,7 @@ export async function POST(req: Request) {
         return NextResponse.json({ error });
     }
 
-    return NextResponse.json({ message: "Deleted user successfully." });
+    return NextResponse.json({ message: "User deleted successfully." });
 }
 
 async function deleteAllImages(supabase: SupabaseClient, userId: string) {
@@ -72,5 +72,10 @@ async function deleteAllImages(supabase: SupabaseClient, userId: string) {
         Bucket: process.env.BUCKET_NAME!,
         Delete: { Objects: imageKeys },
     });
-    await s3Client.send(command);
+
+    const res = await s3Client.send(command);
+    if (res.Errors) {
+        console.log(res.Errors);
+        throw new Error("Deleting from S3 failed.");
+    }
 }

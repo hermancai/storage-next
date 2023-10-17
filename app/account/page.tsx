@@ -3,8 +3,10 @@
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useState } from "react";
 import useGetUser from "@/hooks/useGetUser";
+import { useRouter } from "next/navigation";
 
 export default function AccountPage() {
+    const router = useRouter();
     const supabase = createClientComponentClient();
     const user = useGetUser();
 
@@ -77,7 +79,11 @@ export default function AccountPage() {
             return console.log(res.error);
         }
 
-        await supabase.auth.signOut();
+        const { error } = await supabase.auth.signOut();
+        if (error) {
+            return console.log(error);
+        }
+        router.push("/");
     };
 
     if (!user) {
