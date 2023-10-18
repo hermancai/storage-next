@@ -73,6 +73,23 @@ export default function ImageCard({ image, setCurrentImages }: ImageCardType) {
         });
     };
 
+    const getFullImage = async () => {
+        const response = await fetch("api/getFullImage", {
+            method: "POST",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ s3_id: image.s3_id, name: image.name }),
+        });
+
+        const res = await response.json();
+        if (res.error) {
+            return console.log(res.error);
+        }
+        window.open(res.url, "_blank");
+    };
+
     return (
         <div key={image.s3_id}>
             {image.name}
@@ -85,19 +102,22 @@ export default function ImageCard({ image, setCurrentImages }: ImageCardType) {
                 height={100}
                 width={100}
             />
-            <div>
-                <label htmlFor="rename-image">Rename Image</label>
-                <input
-                    id="rename-image"
-                    type="text"
-                    value={newName}
-                    onChange={(e) => setNewName(e.target.value)}
-                />
-                <button onClick={renameImage}>RENAME IMAGE</button>
+            <div className="flex flex-col gap-2 items-start">
+                <div>
+                    <label htmlFor="rename-image">Rename Image</label>
+                    <input
+                        id="rename-image"
+                        type="text"
+                        value={newName}
+                        onChange={(e) => setNewName(e.target.value)}
+                    />
+                    <button onClick={renameImage}>RENAME IMAGE</button>
+                </div>
+                <button onClick={getFullImage}>DOWNLOAD</button>
+                <button onClick={() => deleteImage(image.s3_id)}>
+                    DELETE IMAGE
+                </button>
             </div>
-            <button onClick={() => deleteImage(image.s3_id)}>
-                DELETE IMAGE
-            </button>
         </div>
     );
 }
