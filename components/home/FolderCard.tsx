@@ -1,4 +1,5 @@
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+"use client";
+
 import { Dispatch, SetStateAction } from "react";
 import Link from "next/link";
 
@@ -16,16 +17,20 @@ export default function FolderCard({
     folder,
     setNestedFolders,
 }: FolderCardType) {
-    const supabase = createClientComponentClient();
-
     const deleteFolder = async () => {
-        const { error } = await supabase
-            .from("folder")
-            .delete()
-            .eq("id", folder.id);
-        if (error) {
-            return console.log(error);
+        const response = await fetch("/api/deleteFolder", {
+            method: "POST",
+            headers: {
+                Accept: "application/json",
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ id: folder.id }),
+        });
+        const res = await response.json();
+        if (res.error) {
+            return console.log(res.error);
         }
+
         setNestedFolders((prevState) =>
             prevState.filter((entry) => entry.id !== folder.id)
         );
