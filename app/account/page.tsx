@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 export default function AccountPage() {
     const router = useRouter();
     const supabase = createClientComponentClient();
-    const user = useGetUser();
+    const { user } = useGetUser();
 
     const [newUsername, setNewUsername] = useState("");
     const [newEmail, setNewEmail] = useState("");
@@ -86,11 +86,9 @@ export default function AccountPage() {
         router.push("/");
     };
 
-    if (!user) {
-        return <div>loading</div>;
-    }
-
-    return (
+    return user === null ? (
+        <div>LOADING</div>
+    ) : (
         <div>
             <div>
                 <p>Current Username: {user.user_metadata.name}</p>

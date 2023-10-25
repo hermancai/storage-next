@@ -5,8 +5,10 @@ import { useCallback, useEffect, useState } from "react";
 export default function useGetUser() {
     const supabase = createClientComponentClient();
     const [user, setUser] = useState<User | null>(null);
+    const [loading, setLoading] = useState(true);
 
     const getUpdatedUser = useCallback(async () => {
+        setLoading(true);
         const sessionRes = await supabase.auth.getSession();
         if (sessionRes.error || !sessionRes.data.session) {
             setUser(null);
@@ -15,6 +17,7 @@ export default function useGetUser() {
 
         const { data } = await supabase.auth.getUser();
         setUser(data.user);
+        setLoading(false);
     }, [supabase]);
 
     useEffect(() => {
@@ -56,5 +59,5 @@ export default function useGetUser() {
         };
     }, [supabase, user, getUpdatedUser]);
 
-    return user;
+    return { user, loading };
 }
