@@ -1,146 +1,50 @@
 "use client";
 
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { useState } from "react";
 import useGetUser from "@/hooks/useGetUser";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
+import UserForm from "@/components/account/UserForm";
+import EmailForm from "@/components/account/EmailForm";
+import PasswordForm from "@/components/account/PasswordForm";
+import DeleteAccountButton from "@/components/account/DeleteAccountButton";
 
 export default function AccountPage() {
-    const router = useRouter();
-    const supabase = createClientComponentClient();
     const { user } = useGetUser();
 
-    const [newUsername, setNewUsername] = useState("");
-    const [newEmail, setNewEmail] = useState("");
-
-    const [currentPassword, setCurrentPassword] = useState("");
-    const [newPassword, setNewPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
-
-    const handleChangeUsername = async () => {
-        if (!user || !newUsername || newUsername === user.user_metadata.name) {
-            return;
-        }
-
-        const { error } = await supabase.auth.updateUser({
-            data: { name: newUsername },
-        });
-        if (error) {
-            return console.log(error);
-        }
-        setNewUsername("");
-    };
-
-    const handleChangeEmail = async () => {
-        if (!user || !newEmail || newEmail === user.email) {
-            return;
-        }
-
-        const { error } = await supabase.auth.updateUser({
-            email: newEmail,
-        });
-        if (error) {
-            return console.log(error);
-        }
-        setNewEmail("");
-    };
-
-    const handleChangePassword = async () => {
-        if (
-            !currentPassword ||
-            !newPassword ||
-            newPassword !== confirmPassword
-        ) {
-            return;
-        }
-
-        const { error } = await supabase.rpc("change_user_password", {
-            current_plain_password: currentPassword,
-            new_plain_password: newPassword,
-        });
-        if (error) {
-            return console.log(error);
-        }
-        setCurrentPassword("");
-        setNewPassword("");
-        setConfirmPassword("");
-    };
-
-    const handleDeleteAccount = async () => {
-        const response = await fetch("/api/deleteAccount", {
-            method: "POST",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-            },
-        });
-        const res = await response.json();
-        if (res.error) {
-            return console.log(res.error);
-        }
-
-        const { error } = await supabase.auth.signOut();
-        if (error) {
-            return console.log(error);
-        }
-        router.push("/");
-    };
-
-    return user === null ? (
-        <div>LOADING</div>
-    ) : (
-        <div>
-            <div>
-                <p>Current Username: {user.user_metadata.name}</p>
-                <label htmlFor="change-username">Change Username:</label>
-                <input
-                    type="text"
-                    id="change-username"
-                    value={newUsername}
-                    onChange={(e) => setNewUsername(e.target.value)}
-                />
-                <button onClick={handleChangeUsername}>CHANGE USERNAME</button>
+    return (
+        <div className="flex items-center justify-center">
+            <div className="max-w-screen-lg p-8 flex flex-col gap-6 grow">
+                <Link
+                    href="/home"
+                    className="text-slate-700 underline flex flex-nowrap whitespace-nowrap items-center w-min"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth="1.2"
+                        stroke="currentColor"
+                        className="w-5 h-5"
+                    >
+                        <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            d="M19.5 12h-15m0 0l6.75 6.75M4.5 12l6.75-6.75"
+                        />
+                    </svg>
+                    Back to Home
+                </Link>
+                <h1 className="text-3xl sm:text-4xl">Manage Account</h1>
+                <div className="grid grid-cols-[auto_minmax(0,1fr)] break-words p-4 pt-3 bg-slate-100 rounded shadow">
+                    <p className="mr-2 text-right text-slate-500">Username: </p>
+                    <p>{user === null ? "" : user.user_metadata.name}</p>
+                    <p className="mr-2 text-right text-slate-500">Email: </p>
+                    <p>{user === null ? "" : user.email}</p>
+                </div>
+                <UserForm user={user} />
+                <EmailForm user={user} />
+                <PasswordForm user={user} />
+                <DeleteAccountButton />
             </div>
-            <br />
-            <div>
-                <p>Current email: {user.email}</p>
-                <label htmlFor="change-email">Change Email:</label>
-                <input
-                    type="text"
-                    id="change-email"
-                    value={newEmail}
-                    onChange={(e) => setNewEmail(e.target.value)}
-                />
-                <button onClick={handleChangeEmail}>CHANGE EMAIL</button>
-            </div>
-            <br />
-            <div>
-                <p>Change Password:</p>
-                <label htmlFor="old-password">Old Password</label>
-                <input
-                    type="password"
-                    id="old-password"
-                    value={currentPassword}
-                    onChange={(e) => setCurrentPassword(e.target.value)}
-                />
-                <label htmlFor="new-password">New Password</label>
-                <input
-                    type="password"
-                    id="new-password"
-                    value={newPassword}
-                    onChange={(e) => setNewPassword(e.target.value)}
-                />
-                <label htmlFor="confirm-password">Confirm New Password</label>
-                <input
-                    type="password"
-                    id="confirm-password"
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                />
-                <button onClick={handleChangePassword}>CHANGE PASSWORD</button>
-            </div>
-            <br />
-            <button onClick={handleDeleteAccount}>DELETE ACCOUNT</button>
         </div>
     );
 }

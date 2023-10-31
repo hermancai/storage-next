@@ -51,6 +51,8 @@ export default function useGetUser() {
                     setUser(null);
                     return;
                 }
+
+                setLoading(false);
             }
         );
 

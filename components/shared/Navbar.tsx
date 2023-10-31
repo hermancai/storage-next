@@ -21,7 +21,7 @@ export default function Navbar() {
     };
 
     return (
-        <div className="flex justify-between items-center bg-slate-100 p-4 gap-4">
+        <div className="flex justify-between items-center bg-slate-100 p-4 gap-4 shadow">
             <Link
                 href="/"
                 className="text-slate-900 flex flex-nowrap gap-2 items-center"
@@ -45,7 +45,7 @@ export default function Navbar() {
                         d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0z"
                     />
                 </svg>
-                <p className="hidden sm:block whitespace-nowrap">Photo Hub</p>
+                <p className="hidden sm:block whitespace-nowrap">PhotoHub</p>
             </Link>
             {loadingUser ? null : (
                 <div className="flex gap-2 sm:gap-4 items-center min-w-0 max-w-md">
@@ -86,11 +86,11 @@ export default function Navbar() {
                                 >
                                     <Menu.Items
                                         as="div"
-                                        className="absolute right-0 top-9 border-2 border-slate-400 rounded p-1 bg-white flex flex-col gap-1 text-slate-800 origin-top-right max-w-sm"
+                                        className="absolute right-0 top-9 border-2 border-slate-400 rounded p-1 bg-white flex flex-col gap-1 text-slate-800 origin-top-right max-w-[250px]"
                                     >
                                         <Menu.Item disabled>
                                             <div className="px-4 py-1 w-full overflow-hidden">
-                                                <div className="overflow-hidden text-ellipsis">
+                                                <div className="break-words">
                                                     <p>
                                                         {
                                                             user.user_metadata

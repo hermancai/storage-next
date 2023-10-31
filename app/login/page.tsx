@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, FormEvent, ChangeEvent } from "react";
 import ErrorMessage from "@/components/shared/ErrorMessage";
+import NonSSRWrapper from "@/components/shared/NonSSRWrapper";
 
 export default function LoginPage() {
     const supabase = createClientComponentClient();
@@ -85,27 +86,34 @@ export default function LoginPage() {
                     <label htmlFor="email" className="text-slate-500">
                         Email
                     </label>
-                    <input
-                        id="email"
-                        name="email"
-                        value={input.email}
-                        onChange={(e) => handleChange(e)}
-                        className="p-1 border-b border-b-slate-500"
-                    />
+                    <NonSSRWrapper>
+                        <input
+                            id="email"
+                            name="email"
+                            value={input.email}
+                            onChange={(e) => handleChange(e)}
+                            className="p-1 border-b border-b-slate-500"
+                        />
+                    </NonSSRWrapper>
+
                     <ErrorMessage message={error.email} />
                 </div>
                 <div className="flex flex-col">
                     <label htmlFor="password" className="text-slate-500">
                         Password
                     </label>
-                    <input
-                        type="password"
-                        name="password"
-                        id="password"
-                        value={input.password}
-                        onChange={(e) => handleChange(e)}
-                        className="p-1 border-b border-b-slate-500"
-                    />
+                    <NonSSRWrapper>
+                        {" "}
+                        <input
+                            type="password"
+                            name="password"
+                            id="password"
+                            value={input.password}
+                            onChange={(e) => handleChange(e)}
+                            className="p-1 border-b border-b-slate-500"
+                        />
+                    </NonSSRWrapper>
+
                     <ErrorMessage message={error.password} />
                 </div>
                 <ErrorMessage message={error.login} />
