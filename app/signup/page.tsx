@@ -1,11 +1,11 @@
 "use client";
 
-import { useRouter } from "next/navigation";
 import { useState, FormEvent, ChangeEvent } from "react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import Link from "next/link";
 import ErrorMessage from "@/components/shared/ErrorMessage";
 import NonSSRWrapper from "@/components/shared/NonSSRWrapper";
+import OTPInput from "@/components/signup/OTPInput";
 
 export default function SignupPage() {
     const [input, setInput] = useState({
@@ -21,10 +21,9 @@ export default function SignupPage() {
         name: "",
         signup: "",
     });
-    const [signupSuccess, setSignupSuccess] = useState(false);
+    const [showOTPInput, setshowOTPInput] = useState(false);
     const [signupLoading, setSignupLoading] = useState(false);
 
-    const router = useRouter();
     const supabase = createClientComponentClient();
 
     const validateInput = (): boolean => {
@@ -88,6 +87,7 @@ export default function SignupPage() {
         if (!validateInput()) return;
 
         setSignupLoading(true);
+
         const signUpRes = await supabase.auth.signUp({
             email: input.email,
             password: input.password,
@@ -95,8 +95,6 @@ export default function SignupPage() {
                 data: {
                     name: input.name,
                 },
-                // redirect user after verifying email
-                emailRedirectTo: `${location.origin}/api/signup`,
             },
         });
         setSignupLoading(false);
@@ -137,45 +135,20 @@ export default function SignupPage() {
             });
         }
 
-        setSignupSuccess(true);
-        router.refresh();
+        setshowOTPInput(true);
     };
 
     return (
-        <div className="flex justify-center items-center">
-            <form
-                onSubmit={handleSignUp}
-                className="flex flex-col my-16 w-[90%] sm:w-[350px] gap-8 text-slate-700"
-            >
+        <div className="flex flex-col justify-center items-center">
+            <div className="flex flex-col gap-8 my-16 w-[90%] sm:w-[350px]">
                 <h1 className="text-4xl">Sign Up</h1>
-                {signupSuccess ? (
-                    <>
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth="1.5"
-                            stroke="currentColor"
-                            className="w-8 h-8 text-green-500"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                            />
-                        </svg>
-                        <p>
-                            A verification link has been sent to{" "}
-                            <span className="font-bold">{input.email}</span>
-                            <br />
-                            Please click the link to finish setting up your
-                            account.
-                            <br />
-                            This page can be closed.
-                        </p>
-                    </>
+                {showOTPInput ? (
+                    <OTPInput email={input.email} />
                 ) : (
-                    <>
+                    <form
+                        className="flex flex-col gap-8 text-slate-700"
+                        onSubmit={(e) => e.preventDefault()}
+                    >
                         <div className="flex flex-col">
                             <label htmlFor="email" className="text-slate-500">
                                 Email
@@ -274,9 +247,9 @@ export default function SignupPage() {
                                 </Link>
                             </div>
                         </div>
-                    </>
+                    </form>
                 )}
-            </form>
+            </div>
         </div>
     );
 }
