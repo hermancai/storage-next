@@ -5,8 +5,8 @@ import FolderCreate from "@/components/home/FolderCreate";
 import ImageCard from "@/components/home/ImageCard";
 import ImageUpload from "@/components/home/ImageUpload";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import Link from "next/link";
 import { useEffect, useState } from "react";
+import FolderNavigation from "@/components/home/FolderNavigation";
 
 type ImageType = {
     s3_id: string;
@@ -30,7 +30,6 @@ export default function FolderPage({ params }: { params: { id: string } }) {
     // Get folder hierarchy on page load
     useEffect(() => {
         const getFolderPath = async () => {
-            // setLoading(true);
             const { data, error } = await supabase.rpc("get_folder_path", {
                 f_id: params.id,
             });
@@ -38,7 +37,6 @@ export default function FolderPage({ params }: { params: { id: string } }) {
                 return console.log(error);
             }
             setFolderPath(data);
-            // setLoading(false);
         };
 
         getFolderPath();
@@ -88,27 +86,7 @@ export default function FolderPage({ params }: { params: { id: string } }) {
 
     return (
         <div>
-            <div className="flex flex-row gap-4">
-                PATH:
-                {folderPath.map((folder, i, arr) => {
-                    if (arr.length - 1 === i) {
-                        return (
-                            <Link key={folder.id} href="/home">
-                                Home
-                            </Link>
-                        );
-                    }
-                    return (
-                        <Link
-                            key={folder.id}
-                            href={`/home/folder/${folder.id}`}
-                        >
-                            {folder.name}
-                        </Link>
-                    );
-                })}
-            </div>
-            <p>Current Folder: {params.id}</p>{" "}
+            <FolderNavigation folderPath={folderPath} />
             <FolderCreate
                 currentFolder={folderPath[0].id}
                 setNestedFolders={setNestedFolders}
