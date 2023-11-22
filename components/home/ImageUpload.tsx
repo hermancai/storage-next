@@ -1,5 +1,10 @@
+"use client";
+
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { ChangeEvent, Dispatch, SetStateAction, useRef, useState } from "react";
+import { toast } from "react-toastify";
+import SuccessToast from "../shared/SuccessToast";
+import ErrorToast from "../shared/ErrorToast";
 
 type ImageType = {
     s3_id: string;
@@ -19,17 +24,25 @@ export default function ImageUpload({
     const supabase = createClientComponentClient();
 
     const fileInputRef = useRef<HTMLInputElement>(null);
-    const [fileToUpload, setFileToUpload] = useState<File | null>(null);
+    const [loading, setLoading] = useState(false);
 
-    const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files) {
-            return setFileToUpload(e.target.files[0]);
+    const handleButtonClick = () => {
+        if (fileInputRef.current) {
+            fileInputRef.current.click();
         }
-        setFileToUpload(null);
     };
 
-    const uploadImage = async () => {
-        if (fileToUpload === null) return;
+    const resetInput = () => {
+        if (fileInputRef.current) {
+            fileInputRef.current.value = "";
+        }
+        setLoading(false);
+    };
+
+    const uploadImage = async (e: ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files === null) return;
+        const fileToUpload = e.target.files[0];
+        setLoading(true);
 
         // Request presigned URL for upload to s3
         const urlRes = await fetch("/api/uploadImage", {
@@ -44,6 +57,8 @@ export default function ImageUpload({
         });
         const urlResponse = await urlRes.json();
         if (urlResponse.error) {
+            resetInput();
+            toast(<ErrorToast message="Upload failed." />);
             return console.log(urlResponse.error);
         }
 
@@ -58,6 +73,8 @@ export default function ImageUpload({
             body: formData,
         });
         if (!s3Res.ok) {
+            resetInput();
+            toast(<ErrorToast message="Upload failed." />);
             return console.log(s3Res);
         }
 
@@ -71,6 +88,8 @@ export default function ImageUpload({
             })
             .select("s3_id");
         if (insertResponse.error) {
+            resetInput();
+            toast(<ErrorToast message="Upload failed." />);
             return console.log(insertResponse.error);
         }
 
@@ -88,6 +107,8 @@ export default function ImageUpload({
         });
         const getThumbRes = await getThumbResponse.json();
         if (getThumbRes.error) {
+            resetInput();
+            toast(<ErrorToast message="Upload failed." />);
             return console.log(getThumbRes.error);
         }
 
@@ -102,25 +123,46 @@ export default function ImageUpload({
             ];
         });
 
-        // Reset file input
-        if (fileInputRef.current) {
-            fileInputRef.current.value = "";
-        }
+        resetInput();
+        toast(<SuccessToast message="Photo uploaded." />);
     };
 
     return (
         <div>
-            <label htmlFor="image-upload">Upload Image</label>
+            <button
+                className="rounded flex flex-nowrap items-center whitespace-nowrap gap-2 px-2 py-1 text-white bg-slate-700 transition-colors hover:bg-slate-900"
+                onClick={handleButtonClick}
+            >
+                {loading ? (
+                    <div className="w-5 h-5 border-2 border-slate-700 border-t-2 border-b-2 border-t-white border-b-white animate-spin rounded-full" />
+                ) : (
+                    <div>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth="1.3"
+                            stroke="currentColor"
+                            className="w-5 h-5"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5"
+                            />
+                        </svg>
+                    </div>
+                )}
+                Upload
+            </button>
             <input
                 ref={fileInputRef}
                 id="image-upload"
                 type="file"
                 accept=".jpg,.jpeg,.png"
-                onChange={(e) => handleFileChange(e)}
+                onChange={(e) => uploadImage(e)}
+                className="hidden"
             />
-            <button className="border p-2" onClick={uploadImage}>
-                UPLOAD IMAGE
-            </button>
         </div>
     );
 }

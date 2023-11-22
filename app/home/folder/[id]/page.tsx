@@ -85,13 +85,20 @@ export default function FolderPage({ params }: { params: { id: string } }) {
     }
 
     return (
-        <div>
+        <div className="flex flex-col gap-4">
             <FolderNavigation folderPath={folderPath} />
-            <FolderCreate
-                currentFolder={folderPath[0].id}
-                setNestedFolders={setNestedFolders}
-            />
-            <br />
+            <div className="flex px-2 gap-2">
+                <ImageUpload
+                    setCurrentImages={setCurrentImages}
+                    currentFolder={folderPath[0].id}
+                />
+                <FolderCreate
+                    currentFolder={folderPath[0].id}
+                    setNestedFolders={setNestedFolders}
+                />
+                <br />
+            </div>
+
             <div>
                 <p>Nested folders: {nestedFolders.length}</p>
                 {nestedFolders.map((folder) => {
@@ -104,12 +111,7 @@ export default function FolderPage({ params }: { params: { id: string } }) {
                     );
                 })}
             </div>
-            <br />
-            <ImageUpload
-                setCurrentImages={setCurrentImages}
-                currentFolder={folderPath[0].id}
-            />
-            <br />
+
             <div>
                 <p>Images in this folder: {currentImages.length}</p>
                 {currentImages.map((image) => {
