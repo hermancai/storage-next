@@ -12,10 +12,7 @@ export async function POST(req: Request) {
             Bucket: process.env.BUCKET_NAME!,
             Key: s3_id,
             Fields: { acl: "private", "Content-Type": "image/" + fileType },
-            Conditions: [
-                ["starts-with", "$Content-Type", "image/"],
-                ["content-length-range", 0, 10485760], // 10 Mb limit
-            ],
+            Conditions: [["starts-with", "$Content-Type", "image/"]],
         });
         return NextResponse.json({
             url,
