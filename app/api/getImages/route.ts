@@ -19,7 +19,7 @@ export async function POST(req: Request) {
     // Get image IDs from supabase
     const getImagesResponse = await supabase
         .from("image")
-        .select("s3_id, name")
+        .select("s3_id, name, created_at")
         .eq("folder_id", folderId);
     if (getImagesResponse.error) {
         return NextResponse.json({ error: getImagesResponse.error });

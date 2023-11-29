@@ -10,6 +10,7 @@ type ImageType = {
     s3_id: string;
     name: string;
     presignedUrl: string;
+    created_at: string;
 };
 
 type ImageUploadType = {
@@ -86,7 +87,7 @@ export default function ImageUpload({
                 name: fileToUpload.name,
                 folder_id: currentFolder,
             })
-            .select("s3_id");
+            .select("s3_id, created_at");
         if (insertResponse.error) {
             resetInput();
             toast(<ErrorToast message="Upload failed." />);
@@ -119,6 +120,7 @@ export default function ImageUpload({
                     s3_id: insertResponse.data[0].s3_id,
                     name: fileToUpload.name,
                     presignedUrl: getThumbRes.presignedUrl,
+                    created_at: insertResponse.data[0].created_at,
                 },
             ];
         });

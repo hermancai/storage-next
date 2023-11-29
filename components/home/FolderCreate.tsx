@@ -1,18 +1,12 @@
 "use client";
 
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import {
-    ChangeEvent,
-    Dispatch,
-    Fragment,
-    SetStateAction,
-    useRef,
-    useState,
-} from "react";
-import { Dialog, Transition } from "@headlessui/react";
+import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
+import { Dialog } from "@headlessui/react";
 import SuccessToast from "../shared/SuccessToast";
 import { toast } from "react-toastify";
 import ErrorMessage from "../shared/ErrorMessage";
+import Modal from "../shared/Modal";
 
 type FolderType = {
     name: string;
@@ -30,7 +24,6 @@ export default function FolderCreate({
 }: FolderCreateType) {
     const supabase = createClientComponentClient();
 
-    const folderInputRef = useRef<HTMLInputElement>(null);
     const [folderInput, setFolderInput] = useState("");
     const [openModal, setOpenModal] = useState(false);
     const [loading, setLoading] = useState(false);
@@ -94,66 +87,35 @@ export default function FolderCreate({
                 </div>
                 New Folder
             </button>
-
-            <Transition appear show={openModal} as={Fragment}>
-                <Dialog as="div" onClose={closeModal}>
-                    <Transition.Child
-                        as={Fragment}
-                        enter="ease-out duration-300"
-                        enterFrom="opacity-0"
-                        enterTo="opacity-100"
-                        leave="ease-in duration-200"
-                        leaveFrom="opacity-100"
-                        leaveTo="opacity-0"
-                    >
-                        <div className="fixed inset-0 bg-black/25" />
-                    </Transition.Child>
-                    <div className="fixed inset-0 overflow-y-auto">
-                        <div className="flex min-h-full items-center justify-center p-4">
-                            <Transition.Child
-                                as={Fragment}
-                                enter="ease-out duration-300"
-                                enterFrom="opacity-0 scale-95"
-                                enterTo="opacity-100 scale-100"
-                                leave="ease-in duration-200"
-                                leaveFrom="opacity-100 scale-100"
-                                leaveTo="opacity-0 scale-95"
-                            >
-                                <Dialog.Panel className="flex flex-col gap-4 w-[90%] max-w-md transform overflow-hidden bg-white rounded p-4 sm:p-6 shadow-xl transition-all">
-                                    <p>Create New Folder</p>
-                                    <input
-                                        ref={folderInputRef}
-                                        id="create-folder"
-                                        type="text"
-                                        value={folderInput}
-                                        onChange={(e) => handleFolderChange(e)}
-                                        placeholder="Folder Name"
-                                        className="px-2 py-1 border border-slate-700 rounded"
-                                    />
-                                    {error !== "" && (
-                                        <ErrorMessage message={error} />
-                                    )}
-                                    <div className="mt-1 flex justify-between w-full">
-                                        <button
-                                            className="px-2 py-1 rounded border border-slate-700 text-slate-700 transition-colors hover:bg-slate-200"
-                                            onClick={closeModal}
-                                        >
-                                            Cancel
-                                        </button>
-                                        <button
-                                            className="px-2 py-1 rounded bg-slate-700 text-white transition-colors hover:bg-slate-900 disabled:bg-slate-900"
-                                            onClick={createFolder}
-                                            disabled={loading}
-                                        >
-                                            Create
-                                        </button>
-                                    </div>
-                                </Dialog.Panel>
-                            </Transition.Child>
-                        </div>
+            <Modal isOpen={openModal} onClose={closeModal}>
+                <Dialog.Panel className="flex flex-col gap-4 w-[90%] max-w-md transform overflow-hidden bg-white rounded p-4 sm:p-6 shadow-xl transition-all">
+                    <p>Create New Folder</p>
+                    <input
+                        id="create-folder"
+                        type="text"
+                        value={folderInput}
+                        onChange={(e) => handleFolderChange(e)}
+                        placeholder="Folder Name"
+                        className="px-2 py-1 border border-slate-700 rounded"
+                    />
+                    {error !== "" && <ErrorMessage message={error} />}
+                    <div className="mt-1 flex justify-between w-full">
+                        <button
+                            className="px-2 py-1 rounded border border-slate-700 text-slate-700 transition-colors hover:bg-slate-200"
+                            onClick={closeModal}
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            className="px-2 py-1 rounded bg-slate-700 text-white transition-colors hover:bg-slate-900 disabled:bg-slate-900"
+                            onClick={createFolder}
+                            disabled={loading}
+                        >
+                            Create
+                        </button>
                     </div>
-                </Dialog>
-            </Transition>
+                </Dialog.Panel>
+            </Modal>
         </div>
     );
 }
