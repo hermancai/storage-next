@@ -210,6 +210,7 @@ export default function ImageCard({
                             alt={image.name}
                             fill
                             style={{ objectFit: "cover" }}
+                            sizes="(max-width: 768px) 100vw, 50vw"
                         />
                     </div>
                 </div>
