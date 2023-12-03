@@ -17,6 +17,7 @@ import Modal from "../shared/Modal";
 import ErrorMessage from "../shared/ErrorMessage";
 import { Dialog } from "@headlessui/react";
 import TableCellWrapper from "./TableCellWrapper";
+import Thumbnail from "./Thumbnail";
 
 type ImageType = {
     s3_id: string;
@@ -205,13 +206,7 @@ export default function ImageCard({
                         className="relative w-full aspect-square cursor-zoom-in"
                         onClick={handleOpenImageModal}
                     >
-                        <Image
-                            src={image.presignedUrl}
-                            alt={image.name}
-                            fill
-                            style={{ objectFit: "cover" }}
-                            sizes="(max-width: 768px) 100vw, 50vw"
-                        />
+                        <Thumbnail image={image} />
                     </div>
                 </div>
             ) : (
@@ -338,6 +333,7 @@ export default function ImageCard({
                             style={{
                                 objectFit: "contain",
                             }}
+                            unoptimized
                         />
                     </Dialog.Panel>
                 </Modal>
