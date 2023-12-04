@@ -78,7 +78,8 @@ export default function FolderPage({ params }: { params: { id: string } }) {
             const getFoldersResponse = await supabase
                 .from("folder")
                 .select("name, id")
-                .eq("parent", folderPath[0].id);
+                .eq("parent", folderPath[0].id)
+                .order("name");
             if (getFoldersResponse.error) {
                 return console.log(getFoldersResponse.error);
             }

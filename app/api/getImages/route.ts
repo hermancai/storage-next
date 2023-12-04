@@ -20,7 +20,8 @@ export async function POST(req: Request) {
     const getImagesResponse = await supabase
         .from("image")
         .select("s3_id, name, created_at")
-        .eq("folder_id", folderId);
+        .eq("folder_id", folderId)
+        .order("name");
     if (getImagesResponse.error) {
         return NextResponse.json({ error: getImagesResponse.error });
     }

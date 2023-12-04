@@ -76,7 +76,8 @@ export default function HomePage() {
             const getFoldersResponse = await supabase
                 .from("folder")
                 .select("name, id")
-                .eq("parent", currentFolder);
+                .eq("parent", currentFolder)
+                .order("name");
             if (getFoldersResponse.error) {
                 return console.log(getFoldersResponse.error);
             }
