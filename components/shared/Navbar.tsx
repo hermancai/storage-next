@@ -86,7 +86,7 @@ export default function Navbar() {
                                 >
                                     <Menu.Items
                                         as="div"
-                                        className="absolute right-0 top-9 border-2 border-slate-400 rounded p-1 bg-white flex flex-col gap-1 text-slate-800 origin-top-right max-w-[250px]"
+                                        className="z-10 absolute right-0 top-9 border-2 border-slate-400 rounded p-1 bg-white flex flex-col gap-1 text-slate-800 origin-top-right max-w-[250px]"
                                     >
                                         <Menu.Item disabled>
                                             <div className="px-4 py-1 w-full overflow-hidden">
