@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/navigation";
 import useGetUser from "@/hooks/useGetUser";
@@ -21,31 +22,22 @@ export default function Navbar() {
     };
 
     return (
-        <div className="flex justify-between items-center bg-slate-100 p-4 gap-4 shadow">
+        <div className="h-[75px] w-full flex justify-between items-center border-b bg-slate-100 p-4 gap-4 shadow">
             <Link
                 href="/"
-                className="text-slate-900 flex flex-nowrap gap-2 items-center"
+                className="text-slate-900 flex flex-nowrap gap-1 items-center relative transition-colors hover:bg-slate-300 rounded-full p-1"
             >
-                <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    strokeWidth="1.25"
-                    stroke="currentColor"
-                    className="w-8 h-8"
-                >
-                    <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z"
+                <div className="relative h-10 w-10">
+                    <Image
+                        src="images/logo.svg"
+                        alt="logo"
+                        fill
+                        style={{ objectFit: "contain" }}
                     />
-                    <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0z"
-                    />
-                </svg>
-                <p className="hidden sm:block whitespace-nowrap">PhotoHub</p>
+                </div>
+                <p className="hidden sm:block whitespace-nowrap pr-1">
+                    PhotoSafe
+                </p>
             </Link>
             {loadingUser ? null : (
                 <div className="flex gap-2 sm:gap-4 items-center min-w-0 max-w-md">
@@ -183,13 +175,13 @@ export default function Navbar() {
                         <>
                             <Link
                                 href="/signup"
-                                className="py-2 px-4 rounded whitespace-nowrap flex flex-nowrap gap-2 items-center text-slate-900 border border-slate-100 transition-colors hover:border-slate-900"
+                                className="shadow py-2 px-3 rounded whitespace-nowrap flex flex-nowrap gap-2 items-center text-slate-900 border border-slate-900 transition-colors hover:bg-slate-300"
                             >
                                 Sign Up
                             </Link>
                             <Link
                                 href="/login"
-                                className="border py-2 px-4 rounded whitespace-nowrap flex flex-nowrap gap-2 items-center bg-slate-700 text-white transition-colors hover:bg-slate-900 group"
+                                className="shadow border py-2 px-3 rounded whitespace-nowrap flex flex-nowrap gap-2 items-center bg-slate-700 text-white transition-colors hover:bg-slate-900 group"
                             >
                                 Log In
                                 <svg
