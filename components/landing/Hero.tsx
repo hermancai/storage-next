@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import GuestLoginButton from "./GuestLoginButton";
 
 export default function Hero() {
     return (
@@ -25,9 +26,7 @@ export default function Hero() {
                         >
                             Get Started
                         </Link>
-                        <button className="shadow py-2 px-3 rounded whitespace-nowrap bg-slate-100 text-slate-900 border border-slate-900 transition-colors hover:bg-slate-300">
-                            Guest Demo
-                        </button>
+                        <GuestLoginButton />
                     </div>
                 </div>
                 <div className="relative min-w-[300px] w-full max-w-lg min-h-[300px] md:h-[300px] top-0 md:-top-8">

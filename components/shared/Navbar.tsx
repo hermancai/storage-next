@@ -9,6 +9,8 @@ import { Menu, Transition } from "@headlessui/react";
 import { Fragment } from "react";
 
 export default function Navbar() {
+    const guestEmail = process.env.NEXT_PUBLIC_GUEST_EMAIL!;
+
     const router = useRouter();
     const supabase = createClientComponentClient();
     const { user, loading: loadingUser } = useGetUser();
@@ -89,9 +91,18 @@ export default function Navbar() {
                                                                 .name
                                                         }
                                                     </p>
-                                                    <p className="text-slate-500 text-sm">
-                                                        {user.email}
-                                                    </p>
+                                                    {user.email ===
+                                                    guestEmail ? (
+                                                        <p className="text-red-400 text-sm italic">
+                                                            Guest account
+                                                            management is
+                                                            disabled.
+                                                        </p>
+                                                    ) : (
+                                                        <p className="text-slate-500 text-sm">
+                                                            {user.email}
+                                                        </p>
+                                                    )}
                                                     <div className="h-0 w-full border border-slate-400 mt-3" />
                                                 </div>
                                             </div>
@@ -121,7 +132,14 @@ export default function Navbar() {
                                         <Menu.Item>
                                             <Link
                                                 href="/account"
-                                                className="whitespace-nowrap w-full px-4 py-2 rounded hover:bg-slate-200 text-left flex flex-nowrap gap-2 items-center transition-colors"
+                                                aria-disabled={
+                                                    user.email === guestEmail
+                                                }
+                                                className={`whitespace-nowrap w-full px-4 py-2 rounded hover:bg-slate-200 text-left flex flex-nowrap gap-2 items-center transition-colors ${
+                                                    user.email === guestEmail
+                                                        ? "pointer-events-none text-slate-500"
+                                                        : ""
+                                                }`}
                                             >
                                                 <svg
                                                     xmlns="http://www.w3.org/2000/svg"
