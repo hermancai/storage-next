@@ -1,12 +1,13 @@
 import Link from "next/link";
 import Image from "next/image";
 import { PropsWithChildren } from "react";
+import LogoHomeLink from "./LogoHomeLink";
 
 function FakeLink({ children }: PropsWithChildren) {
     return (
         <Link
             href="/about"
-            className="p-1 rounded transition-colors hover:bg-slate-300"
+            className="p-1 rounded transition-colors text-zinc-100 hover:bg-zinc-700"
         >
             {children}
         </Link>
@@ -15,27 +16,14 @@ function FakeLink({ children }: PropsWithChildren) {
 
 export default function Footer() {
     return (
-        <div className="w-full mt-auto bg-slate-100 py-8 px-4 flex justify-center border-t">
+        <div className="w-full mt-auto bg-zinc-900 py-8 px-4 flex justify-center border-t border-zinc-500">
             <div className="w-full max-w-7xl flex flex-col gap-4">
-                <Link
-                    href="/"
-                    className="w-min text-slate-900 flex flex-nowrap gap-1 items-center relative transition-colors hover:bg-slate-300 rounded-full p-1"
-                >
-                    <div className="relative h-10 w-10">
-                        <Image
-                            src="images/logo.svg"
-                            alt="logo"
-                            fill
-                            style={{ objectFit: "contain" }}
-                        />
-                    </div>
-                    <p className="whitespace-nowrap pr-1">PhotoSafe</p>
-                </Link>
+                <LogoHomeLink />
                 <div className="flex flex-wrap justify-between gap-4">
                     <div className="flex flex-wrap gap-4">
                         <FakeLink>
                             <svg
-                                fill="#0f172a"
+                                fill="#f4f4f5"
                                 xmlns="http://www.w3.org/2000/svg"
                                 viewBox="0 0 310 310"
                                 className="h-6 w-6"
@@ -53,7 +41,7 @@ export default function Footer() {
                         </FakeLink>
                         <FakeLink>
                             <svg
-                                fill="#0f172a"
+                                fill="#f4f4f5"
                                 className="h-6 w-6"
                                 xmlns="http://www.w3.org/2000/svg"
                                 viewBox="0 0 310 310"
@@ -78,7 +66,7 @@ export default function Footer() {
                         </FakeLink>
                         <FakeLink>
                             <svg
-                                fill="#0f172a"
+                                fill="#f4f4f5"
                                 className="h-6 w-6"
                                 xmlns="http://www.w3.org/2000/svg"
                                 viewBox="0 0 299.998 299.998"
@@ -118,7 +106,7 @@ export default function Footer() {
                         </FakeLink>
                         <FakeLink>
                             <svg
-                                fill="#0f172a"
+                                fill="#f4f4f5"
                                 className="h-6 w-6"
                                 xmlns="http://www.w3.org/2000/svg"
                                 viewBox="0 0 315 315"
@@ -152,7 +140,7 @@ export default function Footer() {
                         <FakeLink>Help</FakeLink>
                     </div>
                 </div>
-                <p className="text-sm text-center text-gray-500">
+                <p className="text-sm text-center text-zinc-400">
                     © {new Date().getFullYear()} PhotoSafe
                 </p>
             </div>

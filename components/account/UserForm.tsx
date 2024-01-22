@@ -45,21 +45,18 @@ export default function UserForm({ user }: UserFormProps) {
     };
 
     return (
-        <div className="flex flex-col p-4 pt-2 gap-2 bg-slate-100 rounded shadow">
+        <div className="flex flex-col p-4 pt-2 gap-2 bg-zinc-900 rounded">
             <p className="font-bold">Change Username</p>
-            <span className="h-0 w-full border border-slate-300" />
+            <span className="h-0 w-full border border-zinc-400" />
             <div className="flex flex-col gap-1">
-                <label
-                    htmlFor="change-username"
-                    className="text-sm text-slate-500"
-                >
+                <label htmlFor="change-username" className="text-sm">
                     New Username
                 </label>
                 <NonSSRWrapper>
                     <input
                         type="text"
                         id="change-username"
-                        className="py-1 px-2 rounded shadow"
+                        className="py-1 px-2 rounded bg-zinc-800 border border-zinc-500"
                         value={newUsername}
                         size={1}
                         onChange={(e) => setNewUsername(e.target.value)}
@@ -71,7 +68,7 @@ export default function UserForm({ user }: UserFormProps) {
             <button
                 onClick={handleChangeUsername}
                 disabled={loading}
-                className="mt-2 self-end px-2 py-1 rounded bg-slate-700 text-white transition-colors hover:bg-slate-900 disabled:bg-slate-900 disabled:text-slate-400"
+                className="mt-2 self-end px-2 py-1 rounded bg-zinc-100 text-zinc-900 transition-colors hover:bg-zinc-300 disabled:bg-zinc-300"
             >
                 Update
             </button>

@@ -185,13 +185,13 @@ export default function ImageCard({
     return (
         <>
             {showGrid ? (
-                <div className="w-full flex flex-col gap-2 px-3 py-2 rounded bg-slate-100">
+                <div className="w-full flex flex-col gap-2 px-3 py-2 rounded bg-zinc-900 hover:bg-zinc-700 transition-colors">
                     <div
                         className="flex flex-row flex-nowrap gap-2 items-center"
                         title={"Image: " + image.name}
                     >
                         <ImageIcon />
-                        <p className="whitespace-nowrap text-ellipsis overflow-hidden text-sm text-slate-900">
+                        <p className="whitespace-nowrap text-ellipsis overflow-hidden text-sm text-zinc-100">
                             {image.name}
                         </p>
                         <div className="ml-auto [display:inherit] text-sm">
@@ -210,7 +210,7 @@ export default function ImageCard({
                     </div>
                 </div>
             ) : (
-                <tr className="transition-colors hover:bg-slate-100 flex items-center border-b text-sm pl-2 gap-2">
+                <tr className="transition-colors hover:bg-zinc-700 flex items-center border-b border-zinc-500 text-sm pl-2 gap-2">
                     <td
                         className="grow overflow-hidden"
                         onClick={handleOpenImageModal}
@@ -240,32 +240,32 @@ export default function ImageCard({
                     isOpen={openRenameModal}
                     onClose={handleCloseRenameModal}
                 >
-                    <Dialog.Panel className="flex flex-col gap-4 w-[90%] max-w-md transform overflow-hidden bg-white rounded p-4 sm:p-6 shadow-xl transition-all">
+                    <Dialog.Panel className="flex flex-col gap-4 w-[90%] max-w-md transform overflow-hidden bg-zinc-100 rounded p-4 sm:p-6 shadow-xl transition-all">
                         <p>
                             <span className="underline">Rename Image</span>
                             <br />
                             <span className="text-sm">{image.name}</span>
                         </p>
                         <input
-                            id="create-folder"
+                            id="rename-image"
                             type="text"
                             value={renameInput}
                             onChange={(e) => setRenameInput(e.target.value)}
                             placeholder="New Name"
-                            className="px-2 py-1 border border-slate-700 rounded"
+                            className="px-2 py-1 border border-zinc-700 rounded"
                         />
                         {renameError !== "" && (
                             <ErrorMessage message={renameError} />
                         )}
                         <div className="mt-1 flex justify-between w-full">
                             <button
-                                className="px-2 py-1 rounded border border-slate-700 text-slate-700 transition-colors hover:bg-slate-200"
+                                className="px-2 py-1 rounded border border-zinc-700 text-zinc-700 transition-colors hover:bg-zinc-200"
                                 onClick={handleCloseRenameModal}
                             >
                                 Cancel
                             </button>
                             <button
-                                className="px-2 py-1 rounded bg-slate-700 text-white transition-colors hover:bg-slate-900 disabled:bg-slate-900"
+                                className="px-2 py-1 rounded bg-zinc-900 text-zinc-100 transition-colors hover:bg-zinc-700 disabled:bg-slate-900"
                                 onClick={renameImage}
                                 disabled={renameLoading}
                             >
@@ -290,7 +290,7 @@ export default function ImageCard({
                         )}
                         <div className="mt-1 flex justify-between w-full">
                             <button
-                                className="px-2 py-1 rounded border border-slate-700 text-slate-700 transition-colors hover:bg-slate-200"
+                                className="px-2 py-1 rounded border border-zinc-900 text-zinc-900 transition-colors hover:bg-zinc-200"
                                 onClick={handleCloseDeleteModal}
                             >
                                 Cancel

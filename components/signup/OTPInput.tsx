@@ -48,7 +48,7 @@ export default function OTPInput({ email }: OTPInputType) {
             <p>Enter the code to finish setting up your account.</p>
             <NonSSRWrapper>
                 <input
-                    className="p-2 rounded bg-slate-100 border border-slate-700 text-center w-full"
+                    className="p-2 rounded bg-zinc-900 border border-zinc-500 text-center w-full"
                     id="signup-code"
                     type="text"
                     placeholder="Verification Code"
@@ -63,7 +63,7 @@ export default function OTPInput({ email }: OTPInputType) {
             )}
 
             <button
-                className="px-2 py-2 rounded text-white bg-slate-700 transition-colors hover:bg-slate-900"
+                className="px-2 py-2 rounded text-zinc-900 bg-zinc-100 transition-colors hover:bg-zinc-300"
                 onClick={handleVerifyCode}
                 disabled={loading}
             >

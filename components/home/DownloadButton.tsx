@@ -9,7 +9,7 @@ export default function DownloadButton({ onClick }: DownloadButtonType) {
         <Menu.Item
             as="button"
             onClick={onClick}
-            className="rounded flex flex-nowrap items-center gap-2 px-2 py-1 transition-colors hover:bg-slate-200"
+            className="rounded flex flex-nowrap items-center gap-2 px-2 py-1 transition-colors hover:bg-zinc-700"
             title=""
         >
             <div>

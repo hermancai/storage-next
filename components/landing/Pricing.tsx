@@ -2,7 +2,7 @@ import Link from "next/link";
 
 function Feature({ text }: { text: string }) {
     return (
-        <div className="flex flex-nowrap gap-1 items-center text-slate-700">
+        <div className="flex flex-nowrap gap-1 items-center text-zinc-200">
             <div>
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -39,7 +39,7 @@ function PricingCard(props: PricingCardType) {
             }`}
         >
             <div
-                className={`h-8 w-full flex items-center justify-center rounded text-white ${
+                className={`h-8 w-full flex items-center justify-center rounded text-zinc-900 ${
                     props.banner ? "visible" : "invisible hidden sm:block"
                 }`}
             >
@@ -47,16 +47,16 @@ function PricingCard(props: PricingCardType) {
             </div>
             <div
                 className={`shadow flex flex-col items-center border grow rounded w-full h-full ${
-                    props.banner ? "border-orange-400" : "border-slate-300"
+                    props.banner ? "border-orange-400" : "border-slate-500"
                 }`}
             >
-                <div className="flex flex-col items-center px-4 pb-4 pt-2 rounded w-full h-full bg-white">
-                    <p className="italic text-slate-500">{props.subtitle}</p>
-                    <p className="text-5xl mb-1">
+                <div className="flex flex-col items-center px-4 pb-4 pt-2 rounded w-full h-full bg-zinc-900">
+                    <p className="italic text-zinc-400">{props.subtitle}</p>
+                    <p className="text-5xl mb-1 text-zinc-100">
                         {props.price}
-                        <span className="text-base text-slate-500">/month</span>
+                        <span className="text-base text-zinc-400">/month</span>
                     </p>
-                    <span className="w-full h-0 border-b border-b-slate-300 my-2" />
+                    <span className="w-full h-0 border-b border-zinc-500 my-2" />
                     <div className="flex flex-col gap-2 mt-1 mb-3">
                         {props.features.map((feature, i) => (
                             <Feature key={i} text={feature} />
@@ -66,8 +66,8 @@ function PricingCard(props: PricingCardType) {
                         href="/signup"
                         className={`shadow px-2 py-1 rounded border transition-colors mt-auto ${
                             props.banner
-                                ? "text-white border-slate-700 bg-slate-700 hover:bg-slate-900"
-                                : "border-slate-700  hover:bg-slate-300"
+                                ? "text-zinc-900 border-zinc-900 bg-zinc-100 hover:bg-zinc-300"
+                                : "border-zinc-100 text-zinc-100 hover:bg-zinc-700"
                         }`}
                     >
                         {props.buttonText}
@@ -80,8 +80,11 @@ function PricingCard(props: PricingCardType) {
 
 export default function Pricing() {
     return (
-        <div className="w-full flex justify-center items-center ">
-            <div className="flex flex-col sm:flex-row items-end justify-center gap-4 text-slate-900 px-4 py-12 max-w-5xl w-full h-full">
+        <div className="w-full flex flex-col justify-center items-center bg-zinc-800 px-4 pb-12">
+            <h3 className="text-zinc-100 text-3xl py-6">
+                &#8212; Pricing &#8212;
+            </h3>
+            <div className="flex flex-col sm:flex-row items-end justify-center gap-4 text-slate-900 max-w-5xl w-full h-full">
                 <PricingCard
                     subtitle="Free"
                     price="$0"

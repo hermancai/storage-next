@@ -11,11 +11,11 @@ export default function AccountPage() {
     const { user } = useGetUser();
 
     return (
-        <div className="flex items-center justify-center">
+        <div className="flex items-center justify-center text-zinc-100 bg-zinc-800">
             <div className="max-w-screen-lg p-8 flex flex-col gap-6 grow">
                 <Link
                     href="/home"
-                    className="text-slate-700 underline flex flex-nowrap whitespace-nowrap items-center w-min"
+                    className="text-zinc-100 underline flex flex-nowrap whitespace-nowrap items-center w-min"
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -34,10 +34,10 @@ export default function AccountPage() {
                     Back to Home
                 </Link>
                 <h1 className="text-3xl sm:text-4xl">Manage Account</h1>
-                <div className="grid grid-cols-[auto_minmax(0,1fr)] break-words p-4 pt-3 bg-slate-100 rounded shadow">
-                    <p className="mr-2 text-right text-slate-500">Username: </p>
+                <div className="grid grid-cols-[auto_minmax(0,1fr)] break-words p-4 pt-3 bg-zinc-900 rounded">
+                    <p className="mr-2 text-right text-zinc-100">Username: </p>
                     <p>{user === null ? "" : user.user_metadata.name}</p>
-                    <p className="mr-2 text-right text-slate-500">Email: </p>
+                    <p className="mr-2 text-right text-zinc-100">Email: </p>
                     <p>{user === null ? "" : user.email}</p>
                 </div>
                 <UserForm user={user} />

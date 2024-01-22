@@ -61,7 +61,7 @@ export default function DeleteAccountButton() {
 
                     <div className="mt-1 flex justify-between w-full">
                         <button
-                            className="px-2 py-1 rounded border border-slate-700 text-slate-700 transition-colors hover:bg-slate-200"
+                            className="px-2 py-1 rounded border border-zinc-900 text-zinc-900 transition-colors hover:bg-zinc-200"
                             onClick={() => setOpenModal(false)}
                         >
                             Cancel

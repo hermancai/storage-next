@@ -29,7 +29,7 @@ export default function FolderPage({ params }: { params: { id: string } }) {
     const [folderPath, setFolderPath] = useState<FolderType[]>([]);
     const [nestedFolders, setNestedFolders] = useState<FolderType[]>([]);
     const [currentImages, setCurrentImages] = useState<ImageType[]>([]);
-    const [showGrid, setShowGrid] = useState(false);
+    const [showGrid, setShowGrid] = useState(true);
     const [loadingCurrentFolder, setLoadingCurrentFolder] = useState(true);
     const [loadingFolders, setLoadingFolders] = useState(true);
     const [loadingImages, setLoadingImages] = useState(true);
@@ -92,7 +92,7 @@ export default function FolderPage({ params }: { params: { id: string } }) {
     }, [folderPath, supabase]);
 
     return (
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 text-zinc-100">
             {loadingCurrentFolder ? null : (
                 <>
                     <FolderNavigation folderPath={folderPath} />
@@ -117,12 +117,12 @@ export default function FolderPage({ params }: { params: { id: string } }) {
 
             <div className="px-2 mt-2 flex flex-col gap-2">
                 {loadingFolders || loadingImages ? (
-                    <div className="w-6 h-6 border-2 border-white border-t-slate-700 border-b-slate-700 rounded-full animate-spin" />
+                    <div className="w-6 h-6 border-2 border-white border-t-zinc-800 border-b-zinc-800 rounded-full animate-spin" />
                 ) : (
                     <>
                         {nestedFolders.length === 0 &&
                             currentImages.length === 0 && (
-                                <p className="text-lg text-slate-500">
+                                <p className="text-lg text-zinc-300">
                                     Empty Folder
                                 </p>
                             )}

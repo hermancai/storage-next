@@ -7,21 +7,21 @@ type FeatureType = {
 
 function Feature({ children, text }: FeatureType) {
     return (
-        <div className="bg-white flex flex-col justify-center items-center p-1 max-w-[175px] max-h-[175px] aspect-square rounded-full border">
+        <div className="bg-zinc-700 flex flex-col justify-center items-center p-1 max-w-[175px] max-h-[175px] aspect-square rounded-full">
             {children}
-            <p className="text-sm max-w-[150px]">{text}</p>
+            <p className="text-sm max-w-[150px] text-zinc-100">{text}</p>
         </div>
     );
 }
 
 export default function Features() {
     return (
-        <div className="bg-slate-100/50 w-full flex justify-center">
+        <div className="bg-zinc-900 w-full flex justify-center">
             <div className="flex flex-wrap w-full justify-evenly gap-4 text-center p-8 max-w-4xl">
                 <Feature text="Back up your photos to online storage.">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        fill="white"
+                        fill="none"
                         viewBox="0 0 24 24"
                         strokeWidth="1.3"
                         stroke="currentColor"
@@ -37,7 +37,7 @@ export default function Features() {
                 <Feature text="Keep your photos safe and secure.">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        fill="white"
+                        fill="none"
                         viewBox="0 0 24 24"
                         strokeWidth="1.3"
                         stroke="currentColor"
@@ -53,11 +53,11 @@ export default function Features() {
                 <Feature text="Access your photos from anywhere.">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
-                        fill="white"
+                        fill="none"
                         viewBox="0 0 24 24"
                         strokeWidth="1.1"
                         stroke="currentColor"
-                        className="w-10 h-10 text-slate-500"
+                        className="w-10 h-10 text-zinc-100"
                     >
                         <path
                             strokeLinecap="round"

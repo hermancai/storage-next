@@ -28,7 +28,7 @@ function Chevron() {
                 viewBox="0 0 24 24"
                 strokeWidth="1.5"
                 stroke="currentColor"
-                className="w-4 h-4 text-slate-700"
+                className="w-5 h-5 text-zinc-400"
             >
                 <path
                     strokeLinecap="round"
@@ -46,8 +46,8 @@ function FolderLink({ folder, active }: FolderLinkType) {
             href={`/home/folder/${folder.id}`}
             className={`px-2 py-1 rounded whitespace-nowrap overflow-hidden min-w-[50px] overflow-ellipsis ${
                 active
-                    ? "text-slate-900 underline cursor-default"
-                    : "text-slate-700 hover:text-slate-900 hover:bg-slate-200 transition-colors"
+                    ? "text-zinc-100 underline cursor-default"
+                    : "text-zinc-300 hover:text-zinc-100 hover:bg-zinc-700 transition-colors"
             }`}
             title={folder.name}
         >
@@ -60,7 +60,7 @@ function HomeLink() {
     return (
         <Link
             href="/home"
-            className="px-2 py-1 rounded whitespace-nowrap overflow-hidden min-w-min overflow-ellipsis text-slate-700 hover:text-slate-900 transition-colors hover:bg-slate-200"
+            className="px-2 py-1 rounded whitespace-nowrap overflow-hidden min-w-min overflow-ellipsis text-zinc-300 hover:text-zinc-100 transition-colors hover:bg-zinc-700"
             title="Home"
         >
             Home
@@ -79,7 +79,7 @@ export default function FolderNavigation({ folderPath }: FolderNavigationType) {
                     <Chevron />
                     <Menu as="div" className="relative [display:inherit]">
                         <Menu.Button>
-                            <div className="px-2 py-1 rounded transition-colors hover:bg-slate-200">
+                            <div className="px-2 py-1 rounded transition-colors hover:bg-zinc-700">
                                 {" "}
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -108,7 +108,7 @@ export default function FolderNavigation({ folderPath }: FolderNavigationType) {
                         >
                             <Menu.Items
                                 as="div"
-                                className="absolute left-0 top-9 border-2 border-slate-400 rounded p-1 bg-white flex flex-col gap-1 text-slate-800 origin-top-left max-w-[250px]"
+                                className="absolute left-0 top-9 border border-zinc-500 rounded p-1 bg-zinc-900 flex flex-col gap-1 text-zinc-100 origin-top-left max-w-[250px]"
                             >
                                 {folderPath.slice(2).map((folder) => {
                                     if (folder.parent === null) {

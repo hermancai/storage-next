@@ -31,7 +31,7 @@ function FolderIcon() {
                 viewBox="0 0 24 24"
                 strokeWidth="1.3"
                 stroke="currentColor"
-                className="w-6 h-6 text-slate-500"
+                className="w-6 h-6 text-zinc-100"
             >
                 <path
                     strokeLinecap="round"
@@ -138,10 +138,10 @@ export default function FolderCard({
                         href={`/home/folder/${folder.id}`}
                         prefetch={false}
                         title={"Folder: " + folder.name}
-                        className="flex flex-row flex-nowrap items-center gap-2 px-3 py-2 rounded bg-slate-100 transition-colors hover:bg-slate-200"
+                        className="flex flex-row flex-nowrap items-center gap-2 px-3 py-2 rounded bg-zinc-900 transition-colors hover:bg-zinc-700"
                     >
                         <FolderIcon />
-                        <p className="overflow-hidden whitespace-nowrap text-ellipsis text-slate-900 text-sm">
+                        <p className="overflow-hidden whitespace-nowrap text-ellipsis text-zinc-100 text-sm">
                             {folder.name}
                         </p>
                         <div
@@ -156,7 +156,7 @@ export default function FolderCard({
                     </Link>
                 </>
             ) : (
-                <tr className="transition-colors hover:bg-slate-100 flex items-center border-b text-sm pl-2">
+                <tr className="transition-colors hover:bg-zinc-700 flex items-center border-b border-zinc-500 text-sm pl-2">
                     <td className="grow overflow-hidden">
                         <Link
                             href={`/home/folder/${folder.id}`}
@@ -195,20 +195,20 @@ export default function FolderCard({
                             value={renameInput}
                             onChange={(e) => setRenameInput(e.target.value)}
                             placeholder="New Name"
-                            className="px-2 py-1 border border-slate-700 rounded"
+                            className="px-2 py-1 border border-zinc-700 rounded"
                         />
                         {renameError !== "" && (
                             <ErrorMessage message={renameError} />
                         )}
                         <div className="mt-1 flex justify-between w-full">
                             <button
-                                className="px-2 py-1 rounded border border-slate-700 text-slate-700 transition-colors hover:bg-slate-200"
+                                className="px-2 py-1 rounded border border-zinc-900 text-zinc-900 transition-colors hover:bg-zinc-200"
                                 onClick={handleCloseRenameModal}
                             >
                                 Cancel
                             </button>
                             <button
-                                className="px-2 py-1 rounded bg-slate-700 text-white transition-colors hover:bg-slate-900 disabled:bg-slate-900"
+                                className="px-2 py-1 rounded bg-zinc-900 text-zinc-100 transition-colors hover:bg-zinc-700 disabled:bg-slate-900"
                                 onClick={renameFolder}
                                 disabled={renameLoading}
                             >

@@ -16,7 +16,7 @@ export default function LayoutIcon({ showGrid, setShowGrid }: LayoutIconType) {
     return (
         <div
             onClick={handleClick}
-            className="cursor-pointer rounded p-1 transition-colors hover:bg-slate-200"
+            className="cursor-pointer rounded p-1 transition-colors hover:bg-zinc-700"
             title={showGrid ? "List Layout" : "Grid Layout"}
         >
             {showGrid ? (
@@ -26,7 +26,7 @@ export default function LayoutIcon({ showGrid, setShowGrid }: LayoutIconType) {
                     viewBox="0 0 24 24"
                     strokeWidth="1.5"
                     stroke="currentColor"
-                    className="w-6 h-6"
+                    className="w-6 h-6 text-zinc-100"
                 >
                     <path
                         strokeLinecap="round"
@@ -41,7 +41,7 @@ export default function LayoutIcon({ showGrid, setShowGrid }: LayoutIconType) {
                     viewBox="0 0 24 24"
                     strokeWidth="1.5"
                     stroke="currentColor"
-                    className="w-6 h-6"
+                    className="w-6 h-6 text-zinc-100"
                 >
                     <path
                         strokeLinecap="round"

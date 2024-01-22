@@ -24,7 +24,7 @@ export default function RootLayout({
                     position="bottom-left"
                     hideProgressBar={true}
                     transition={Slide}
-                    theme="dark"
+                    theme="light"
                 />
             </body>
         </html>

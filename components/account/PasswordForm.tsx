@@ -116,15 +116,11 @@ export default function PasswordForm({ user }: UserFormProps) {
     };
 
     return (
-        <div className="flex flex-col p-4 pt-2 gap-2 bg-slate-100 rounded shadow">
+        <div className="flex flex-col p-4 pt-2 gap-2 bg-zinc-900 rounded">
             <p className="font-bold">Change Password</p>
-            <span className="h-0 w-full border border-slate-300" />
-
+            <span className="h-0 w-full border border-zinc-400" />
             <div className="flex flex-col gap-1">
-                <label
-                    htmlFor="current-password"
-                    className="text-sm text-slate-500"
-                >
+                <label htmlFor="current-password" className="text-sm">
                     Current Password
                 </label>
                 <NonSSRWrapper>
@@ -135,16 +131,13 @@ export default function PasswordForm({ user }: UserFormProps) {
                         size={1}
                         value={input.currentPassword}
                         onChange={(e) => handleInputChange(e)}
-                        className="px-2 py-1 rounded shadow"
+                        className="py-1 px-2 rounded bg-zinc-800 border border-zinc-500"
                     />
                 </NonSSRWrapper>
                 <ErrorMessage message={error.currentPassword} />
             </div>
             <div className="flex flex-col gap-1">
-                <label
-                    htmlFor="new-password"
-                    className="text-sm text-slate-500"
-                >
+                <label htmlFor="new-password" className="text-sm">
                     New Password
                 </label>
                 <NonSSRWrapper>
@@ -155,16 +148,13 @@ export default function PasswordForm({ user }: UserFormProps) {
                         size={1}
                         value={input.newPassword}
                         onChange={(e) => handleInputChange(e)}
-                        className="px-2 py-1 rounded shadow"
+                        className="py-1 px-2 rounded bg-zinc-800 border border-zinc-500"
                     />
                 </NonSSRWrapper>
                 <ErrorMessage message={error.newPassword} />
             </div>
             <div className="flex flex-col gap-1">
-                <label
-                    htmlFor="confirm-password"
-                    className="text-sm text-slate-500"
-                >
+                <label htmlFor="confirm-password" className="text-sm">
                     Confirm New Password
                 </label>
                 <NonSSRWrapper>
@@ -175,7 +165,7 @@ export default function PasswordForm({ user }: UserFormProps) {
                         size={1}
                         value={input.confirmPassword}
                         onChange={(e) => handleInputChange(e)}
-                        className="px-2 py-1 rounded shadow"
+                        className="py-1 px-2 rounded bg-zinc-800 border border-zinc-500"
                     />
                 </NonSSRWrapper>
                 <ErrorMessage message={error.confirmPassword} />
@@ -183,7 +173,7 @@ export default function PasswordForm({ user }: UserFormProps) {
             <button
                 onClick={handleChangePassword}
                 disabled={loading}
-                className="mt-2 self-end px-2 py-1 rounded bg-slate-700 text-white transition-colors hover:bg-slate-900 disabled:bg-slate-900 disabled:text-slate-400"
+                className="mt-2 self-end px-2 py-1 rounded bg-zinc-100 text-zinc-900 transition-colors hover:bg-zinc-300 disabled:bg-zinc-300"
             >
                 Update
             </button>

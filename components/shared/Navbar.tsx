@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import useGetUser from "@/hooks/useGetUser";
 import { Menu, Transition } from "@headlessui/react";
 import { Fragment } from "react";
+import LogoHomeLink from "../shared/LogoHomeLink";
 
 export default function Navbar() {
     const guestEmail = process.env.NEXT_PUBLIC_GUEST_EMAIL!;
@@ -24,28 +25,13 @@ export default function Navbar() {
     };
 
     return (
-        <div className="h-[75px] w-full flex justify-between items-center border-b bg-slate-100 p-4 gap-4 shadow">
-            <Link
-                href="/"
-                className="text-slate-900 flex flex-nowrap gap-1 items-center relative transition-colors hover:bg-slate-300 rounded-full p-1"
-            >
-                <div className="relative h-10 w-10">
-                    <Image
-                        src="images/logo.svg"
-                        alt="logo"
-                        fill
-                        style={{ objectFit: "contain" }}
-                    />
-                </div>
-                <p className="hidden sm:block whitespace-nowrap pr-1">
-                    PhotoSafe
-                </p>
-            </Link>
+        <div className="h-[75px] w-full flex justify-between items-center border-b border-zinc-500 bg-zinc-900 p-4 gap-4">
+            <LogoHomeLink />
             {loadingUser ? null : (
                 <div className="flex gap-2 sm:gap-4 items-center min-w-0 max-w-md">
                     {user !== null ? (
                         <>
-                            <span className="whitespace-nowrap overflow-hidden overflow-ellipsis">
+                            <span className="whitespace-nowrap overflow-hidden overflow-ellipsis text-zinc-100">
                                 {user.user_metadata.name}
                             </span>
 
@@ -60,7 +46,7 @@ export default function Navbar() {
                                         viewBox="0 0 24 24"
                                         strokeWidth="1.2"
                                         stroke="currentColor"
-                                        className="w-8 h-8 hover:bg-slate-300 rounded transition-colors"
+                                        className="w-8 h-8 hover:bg-zinc-700 rounded transition-colors text-zinc-100"
                                     >
                                         <path
                                             strokeLinecap="round"
@@ -80,7 +66,7 @@ export default function Navbar() {
                                 >
                                     <Menu.Items
                                         as="div"
-                                        className="z-10 absolute right-0 top-9 border-2 border-slate-400 rounded p-1 bg-white flex flex-col gap-1 text-slate-800 origin-top-right max-w-[250px]"
+                                        className="z-10 absolute right-0 top-9 border border-zinc-500 rounded p-1 bg-zinc-900 flex flex-col gap-1 text-zinc-100 origin-top-right max-w-[250px]"
                                     >
                                         <Menu.Item disabled>
                                             <div className="px-4 py-1 w-full overflow-hidden">
@@ -99,7 +85,7 @@ export default function Navbar() {
                                                             disabled.
                                                         </p>
                                                     ) : (
-                                                        <p className="text-slate-500 text-sm">
+                                                        <p className="text-zinc-400 text-sm">
                                                             {user.email}
                                                         </p>
                                                     )}
@@ -110,7 +96,7 @@ export default function Navbar() {
                                         <Menu.Item>
                                             <Link
                                                 href="/home"
-                                                className="whitespace-nowrap w-full px-4 py-2 rounded hover:bg-slate-200 text-left flex flex-nowrap gap-2 items-center transition-colors"
+                                                className="whitespace-nowrap w-full px-4 py-2 rounded hover:bg-zinc-700 text-left flex flex-nowrap gap-2 items-center transition-colors"
                                             >
                                                 <svg
                                                     xmlns="http://www.w3.org/2000/svg"
@@ -135,7 +121,7 @@ export default function Navbar() {
                                                 aria-disabled={
                                                     user.email === guestEmail
                                                 }
-                                                className={`whitespace-nowrap w-full px-4 py-2 rounded hover:bg-slate-200 text-left flex flex-nowrap gap-2 items-center transition-colors ${
+                                                className={`whitespace-nowrap w-full px-4 py-2 rounded hover:bg-zinc-700 text-left flex flex-nowrap gap-2 items-center transition-colors ${
                                                     user.email === guestEmail
                                                         ? "pointer-events-none text-slate-500"
                                                         : ""
@@ -166,7 +152,7 @@ export default function Navbar() {
                                         <Menu.Item>
                                             <button
                                                 onClick={handleSignOut}
-                                                className="whitespace-nowrap w-full px-4 py-2 rounded hover:bg-slate-200 text-left flex flex-nowrap gap-2 items-center transition-colors"
+                                                className="whitespace-nowrap w-full px-4 py-2 rounded hover:bg-zinc-700 text-left flex flex-nowrap gap-2 items-center transition-colors"
                                             >
                                                 <svg
                                                     xmlns="http://www.w3.org/2000/svg"
@@ -193,13 +179,13 @@ export default function Navbar() {
                         <>
                             <Link
                                 href="/signup"
-                                className="shadow py-2 px-3 rounded whitespace-nowrap flex flex-nowrap gap-2 items-center text-slate-900 border border-slate-900 transition-colors hover:bg-slate-300"
+                                className="shadow py-2 px-3 rounded whitespace-nowrap flex flex-nowrap gap-2 items-center text-zinc-100 border border-zinc-100 transition-colors hover:bg-zinc-700"
                             >
                                 Sign Up
                             </Link>
                             <Link
                                 href="/login"
-                                className="shadow border py-2 px-3 rounded whitespace-nowrap flex flex-nowrap gap-2 items-center bg-slate-700 text-white transition-colors hover:bg-slate-900 group"
+                                className="shadow border py-2 px-3 rounded whitespace-nowrap flex flex-nowrap gap-2 items-center bg-white text-zinc-900 transition-colors hover:bg-zinc-300 group"
                             >
                                 Log In
                                 <svg

@@ -132,7 +132,7 @@ export default function ImageUpload({
     return (
         <div>
             <button
-                className="rounded flex flex-nowrap items-center whitespace-nowrap gap-2 px-2 py-1 text-white bg-slate-700 transition-colors hover:bg-slate-900"
+                className="rounded flex flex-nowrap items-center whitespace-nowrap gap-2 px-2 py-1 text-zinc-900 border border-zinc-900 bg-zinc-100 transition-colors hover:bg-zinc-300"
                 onClick={handleButtonClick}
             >
                 {loading ? (

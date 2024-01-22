@@ -11,7 +11,7 @@ export default function CardOptions({ children }: CardOptionsType) {
     return (
         <Menu as="div" className="relative [display:inherit]" title="Options">
             <Menu.Button>
-                <div className="rounded transition-colors hover:bg-slate-300">
+                <div className="rounded transition-colors hover:bg-zinc-900">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
@@ -39,7 +39,7 @@ export default function CardOptions({ children }: CardOptionsType) {
             >
                 <Menu.Items
                     as="div"
-                    className="z-10 absolute right-0 top-8 border-2 border-slate-400 rounded p-1 bg-white flex flex-col gap-1 text-slate-800 origin-top-right max-w-[250px] text-sm"
+                    className="z-10 absolute right-0 top-6 border border-zinc-300 rounded p-1 bg-zinc-900 flex flex-col gap-1 text-zinc-100 origin-top-right max-w-[250px] text-sm"
                 >
                     {children}
                 </Menu.Items>

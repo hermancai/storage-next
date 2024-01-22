@@ -65,7 +65,7 @@ export default function FolderCreate({
     return (
         <div>
             <button
-                className="border border-slate-700 rounded flex flex-nowrap whitespace-nowrap gap-2 px-2 py-1 transition-colors hover:bg-slate-200"
+                className="border border-zinc-100 rounded flex flex-nowrap whitespace-nowrap gap-2 px-2 py-1 transition-colors hover:bg-zinc-700 text-zinc-100"
                 onClick={() => setOpenModal(true)}
             >
                 <div>
@@ -96,18 +96,18 @@ export default function FolderCreate({
                         value={folderInput}
                         onChange={(e) => handleFolderChange(e)}
                         placeholder="Folder Name"
-                        className="px-2 py-1 border border-slate-700 rounded"
+                        className="px-2 py-1 border border-zinc-700 rounded"
                     />
                     {error !== "" && <ErrorMessage message={error} />}
                     <div className="mt-1 flex justify-between w-full">
                         <button
-                            className="px-2 py-1 rounded border border-slate-700 text-slate-700 transition-colors hover:bg-slate-200"
+                            className="px-2 py-1 rounded border border-zinc-900 text-zinc-900 transition-colors hover:bg-zinc-200"
                             onClick={closeModal}
                         >
                             Cancel
                         </button>
                         <button
-                            className="px-2 py-1 rounded bg-slate-700 text-white transition-colors hover:bg-slate-900 disabled:bg-slate-900"
+                            className="px-2 py-1 rounded bg-zinc-900 text-zinc-100 transition-colors hover:bg-zinc-700 disabled:bg-slate-900"
                             onClick={createFolder}
                             disabled={loading}
                         >

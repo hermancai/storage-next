@@ -6,6 +6,7 @@ import Link from "next/link";
 import ErrorMessage from "@/components/shared/ErrorMessage";
 import NonSSRWrapper from "@/components/shared/NonSSRWrapper";
 import OTPInput from "@/components/signup/OTPInput";
+import Footer from "@/components/shared/Footer";
 
 export default function SignupPage() {
     const [input, setInput] = useState({
@@ -139,38 +140,33 @@ export default function SignupPage() {
     };
 
     return (
-        <div className="flex flex-col justify-center items-center">
-            <div className="flex flex-col gap-8 my-16 w-[90%] sm:w-[350px]">
+        <div className="flex flex-col items-center bg-zinc-800 w-full h-max text-zinc-100 flex-1">
+            <div className="flex flex-col my-12 gap-6 w-[90%] sm:w-[350px]">
                 <h1 className="text-4xl">Sign Up</h1>
                 {showOTPInput ? (
                     <OTPInput email={input.email} />
                 ) : (
                     <form
-                        className="flex flex-col gap-8 text-slate-700"
+                        className="flex flex-col gap-6 h-full"
                         onSubmit={(e) => e.preventDefault()}
                     >
-                        <div className="flex flex-col">
-                            <label htmlFor="email" className="text-slate-500">
-                                Email
-                            </label>
+                        <div className="flex flex-col gap-1">
+                            <label htmlFor="email">Email</label>
                             <NonSSRWrapper>
-                                {" "}
                                 <input
                                     type="text"
                                     name="email"
                                     id="email"
                                     value={input.email}
                                     onChange={(e) => handleChange(e)}
-                                    className="p-1 border-b border-b-slate-500"
+                                    className="border border-zinc-500 rounded py-1 px-2 bg-zinc-900"
                                 />
                             </NonSSRWrapper>
 
                             <ErrorMessage message={error.email} />
                         </div>
-                        <div className="flex flex-col">
-                            <label htmlFor="name" className="text-slate-500">
-                                Username
-                            </label>
+                        <div className="flex flex-col gap-1">
+                            <label htmlFor="name">Username</label>
                             <NonSSRWrapper>
                                 <input
                                     type="text"
@@ -178,19 +174,14 @@ export default function SignupPage() {
                                     name="name"
                                     value={input.name}
                                     onChange={(e) => handleChange(e)}
-                                    className="p-1 border-b border-b-slate-500"
+                                    className="border border-zinc-500 rounded py-1 px-2 bg-zinc-900"
                                 />
                             </NonSSRWrapper>
 
                             <ErrorMessage message={error.name} />
                         </div>
-                        <div className="flex flex-col">
-                            <label
-                                htmlFor="password"
-                                className="text-slate-500"
-                            >
-                                Password
-                            </label>
+                        <div className="flex flex-col gap-1">
+                            <label htmlFor="password">Password</label>
                             <NonSSRWrapper>
                                 <input
                                     type="password"
@@ -198,51 +189,44 @@ export default function SignupPage() {
                                     name="password"
                                     value={input.password}
                                     onChange={(e) => handleChange(e)}
-                                    className="p-1 border-b border-b-slate-500"
+                                    className="border border-zinc-500 rounded py-1 px-2 bg-zinc-900"
                                 />
                             </NonSSRWrapper>
 
                             <ErrorMessage message={error.password} />
                         </div>
-                        <div className="flex flex-col">
-                            <label
-                                htmlFor="confirm-password"
-                                className="text-slate-500"
-                            >
+                        <div className="flex flex-col gap-1">
+                            <label htmlFor="confirm-password">
                                 Confirm Password
                             </label>
                             <NonSSRWrapper>
-                                {" "}
                                 <input
                                     type="password"
                                     id="confirm-password"
                                     name="confirm"
                                     value={input.confirm}
                                     onChange={(e) => handleChange(e)}
-                                    className="p-1 border-b border-b-slate-500"
+                                    className="border border-zinc-500 rounded py-1 px-2 bg-zinc-900"
                                 />
                             </NonSSRWrapper>
 
                             <ErrorMessage message={error.confirm} />
                         </div>
                         <ErrorMessage message={error.signup} />
-                        <div className="text-center w-full flex flex-col gap-4">
+                        <div className="text-center w-full flex flex-col gap-4 mt-2">
                             <button
                                 onClick={handleSignUp}
                                 disabled={signupLoading}
-                                className="flex justify-center items-center gap-2 disabled:bg-slate-900 w-full rounded bg-slate-700 py-2 text-white hover:bg-slate-900 transition-colors"
+                                className="flex justify-center items-center gap-2 disabled:bg-zinc-300 w-full rounded bg-zinc-100 py-2 text-zinc-900 hover:bg-zinc-300 transition-colors"
                             >
                                 {signupLoading && (
-                                    <div className="w-4 h-4 border-2 border-slate-900 border-t-2 border-b-2 border-t-white border-b-white animate-spin rounded-full" />
+                                    <div className="w-4 h-4 border-2 border-zinc-900 border-t-2 border-b-2 border-t-zinc-300 border-b-zinc-300 animate-spin rounded-full" />
                                 )}
                                 Sign Up
                             </button>
-                            <div className="text-sm text-slate-500">
+                            <div className="text-sm text-zinc-200">
                                 Already have an account?{" "}
-                                <Link
-                                    href="/login"
-                                    className="text-slate-700 underline"
-                                >
+                                <Link href="/login" className="underline">
                                     Log In
                                 </Link>
                             </div>
@@ -250,6 +234,7 @@ export default function SignupPage() {
                     </form>
                 )}
             </div>
+            <Footer />
         </div>
     );
 }

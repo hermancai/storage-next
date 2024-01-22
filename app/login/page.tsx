@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useState, FormEvent, ChangeEvent } from "react";
 import ErrorMessage from "@/components/shared/ErrorMessage";
 import NonSSRWrapper from "@/components/shared/NonSSRWrapper";
+import Footer from "@/components/shared/Footer";
 
 export default function LoginPage() {
     const supabase = createClientComponentClient();
@@ -76,32 +77,28 @@ export default function LoginPage() {
     };
 
     return (
-        <div className="flex justify-center items-center">
+        <div className="flex flex-col items-center bg-zinc-800 w-full h-max text-zinc-100 flex-1">
             <form
                 onSubmit={(e) => handleLogin(e)}
-                className="flex flex-col my-16 w-[90%] sm:w-[350px] gap-8 text-slate-700"
+                className="flex flex-col my-12 w-[90%] sm:w-[350px] gap-6"
             >
                 <h1 className="text-4xl">Log In</h1>
-                <div className="flex flex-col">
-                    <label htmlFor="email" className="text-slate-500">
-                        Email
-                    </label>
+                <div className="flex flex-col gap-1">
+                    <label htmlFor="email">Email</label>
                     <NonSSRWrapper>
                         <input
                             id="email"
                             name="email"
                             value={input.email}
                             onChange={(e) => handleChange(e)}
-                            className="p-1 border-b border-b-slate-500"
+                            className="border border-zinc-500 rounded py-1 px-2 bg-zinc-900"
                         />
                     </NonSSRWrapper>
 
                     <ErrorMessage message={error.email} />
                 </div>
-                <div className="flex flex-col">
-                    <label htmlFor="password" className="text-slate-500">
-                        Password
-                    </label>
+                <div className="flex flex-col gap-1">
+                    <label htmlFor="password">Password</label>
                     <NonSSRWrapper>
                         {" "}
                         <input
@@ -110,35 +107,33 @@ export default function LoginPage() {
                             id="password"
                             value={input.password}
                             onChange={(e) => handleChange(e)}
-                            className="p-1 border-b border-b-slate-500"
+                            className="border border-zinc-500 rounded py-1 px-2 bg-zinc-900"
                         />
                     </NonSSRWrapper>
 
                     <ErrorMessage message={error.password} />
                 </div>
                 <ErrorMessage message={error.login} />
-                <div className="text-center w-full flex flex-col gap-4">
+                <div className="text-center w-full flex flex-col gap-4 mt-2">
                     <button
                         onClick={handleLogin}
                         disabled={loginLoading}
-                        className="flex justify-center items-center gap-2 disabled:bg-slate-900 w-full rounded bg-slate-700 py-2 text-white hover:bg-slate-900 transition-colors"
+                        className="flex justify-center items-center gap-2 disabled:bg-zinc-300 w-full rounded bg-zinc-100 py-2 text-zinc-900 hover:bg-zinc-300 transition-colors"
                     >
                         {loginLoading && (
-                            <div className="w-4 h-4 border-2 border-slate-900 border-t-2 border-b-2 border-t-white border-b-white animate-spin rounded-full" />
+                            <div className="w-4 h-4 border-2 border-zinc-900 border-t-2 border-b-2 border-t-zinc-300 border-b-zinc-300 animate-spin rounded-full" />
                         )}
                         Log In
                     </button>
-                    <div className="text-sm text-slate-500">
+                    <div className="text-sm text-zinc-200">
                         Don&apos;t have an account?{" "}
-                        <Link
-                            href="/signup"
-                            className="text-slate-700 underline"
-                        >
+                        <Link href="/signup" className="underline">
                             Sign Up
                         </Link>
                     </div>
                 </div>
             </form>
+            <Footer />
         </div>
     );
 }

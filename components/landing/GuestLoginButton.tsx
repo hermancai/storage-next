@@ -21,10 +21,10 @@ export default function GuestLoginButton() {
         <button
             onClick={loginGuest}
             disabled={loading}
-            className="flex flex-nowrap justify-center items-center gap-1 shadow py-2 px-3 rounded whitespace-nowrap bg-slate-100 text-slate-900 border border-slate-900 transition-colors hover:bg-slate-300"
+            className="flex flex-nowrap justify-center items-center gap-1 shadow py-2 px-3 rounded whitespace-nowrap bg-zinc-100 text-zinc-900 border border-zinc-900 transition-colors hover:bg-zinc-300"
         >
             {loading && (
-                <div className="border-2 rounded-full h-4 w-4 border-slate-300 border-t-slate-900 animate-spin" />
+                <div className="border-2 rounded-full h-4 w-4 border-zinc-100 border-t-zinc-900 animate-spin" />
             )}
             Guest Demo
         </button>
