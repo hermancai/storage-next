@@ -18,6 +18,7 @@ import ErrorMessage from "../shared/ErrorMessage";
 import { Dialog } from "@headlessui/react";
 import TableCellWrapper from "./TableCellWrapper";
 import Thumbnail from "./Thumbnail";
+import ImageModal from "./ImageModal";
 
 type ImageType = {
     s3_id: string;
@@ -72,20 +73,21 @@ export default function ImageCard({
     const handleOpenRenameModal = useCallback(() => {
         setOpenRenameModal(true);
     }, []);
-    const handleOpenDeleteModal = useCallback(
-        () => setOpenDeleteModal(true),
-        []
-    );
-    const handleOpenImageModal = useCallback(() => setOpenImageModal(true), []);
-
     const handleCloseRenameModal = useCallback(() => {
         setRenameInput("");
         setOpenRenameModal(false);
     }, []);
+
+    const handleOpenDeleteModal = useCallback(
+        () => setOpenDeleteModal(true),
+        []
+    );
     const handleCloseDeleteModal = useCallback(
         () => setOpenDeleteModal(false),
         []
     );
+
+    const handleOpenImageModal = useCallback(() => setOpenImageModal(true), []);
     const handleCloseImageModal = useCallback(
         () => setOpenImageModal(false),
         []
@@ -185,7 +187,7 @@ export default function ImageCard({
     return (
         <>
             {showGrid ? (
-                <div className="w-full flex flex-col gap-2 px-3 py-2 rounded bg-zinc-900 hover:bg-zinc-700 transition-colors">
+                <div className="w-full flex flex-col gap-2 p-2 rounded bg-zinc-900 hover:bg-zinc-700 transition-colors">
                     <div
                         className="flex flex-row flex-nowrap gap-2 items-center"
                         title={"Image: " + image.name}
@@ -305,38 +307,11 @@ export default function ImageCard({
                         </div>
                     </Dialog.Panel>
                 </Modal>
-                <Modal isOpen={openImageModal} onClose={handleCloseImageModal}>
-                    <Dialog.Panel className="flex flex-col w-[80%] h-[80%] relative">
-                        <button
-                            className="z-10 absolute right-0 top-0 bg-black border-2 rounded p-1 w-min cursor-pointer"
-                            onClick={handleCloseImageModal}
-                        >
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                strokeWidth="1.5"
-                                stroke="currentColor"
-                                className="w-6 h-6 text-white"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    d="M6 18L18 6M6 6l12 12"
-                                />
-                            </svg>
-                        </button>
-                        <Image
-                            src={image.presignedUrl}
-                            alt={image.name}
-                            fill
-                            style={{
-                                objectFit: "contain",
-                            }}
-                            unoptimized
-                        />
-                    </Dialog.Panel>
-                </Modal>
+                <ImageModal
+                    image={image}
+                    isOpen={openImageModal}
+                    closeModal={handleCloseImageModal}
+                />
             </TableCellWrapper>
         </>
     );
