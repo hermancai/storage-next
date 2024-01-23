@@ -136,7 +136,6 @@ export default function FolderCard({
                 <>
                     <Link
                         href={`/home/folder/${folder.id}`}
-                        prefetch={false}
                         title={"Folder: " + folder.name}
                         className="flex flex-row flex-nowrap items-center gap-2 px-3 py-2 rounded bg-zinc-900 transition-colors hover:bg-zinc-700"
                     >
@@ -162,7 +161,6 @@ export default function FolderCard({
                             href={`/home/folder/${folder.id}`}
                             className="flex flex-nowrap items-center gap-2 py-1"
                             title={folder.name}
-                            prefetch={false}
                         >
                             <FolderIcon />
                             <span className="overflow-hidden whitespace-nowrap text-ellipsis">
