@@ -38,7 +38,7 @@ export default function Thumbnail({ image }: ThumbnailType) {
                 onLoad={() => setShowImage(true)}
             />
             <span
-                className={`absolute w-full h-full bg-slate-300 ${
+                className={`absolute w-full h-full bg-zinc-800 ${
                     showImage ? "hidden" : ""
                 }`}
             />
