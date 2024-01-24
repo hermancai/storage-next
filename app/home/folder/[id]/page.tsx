@@ -9,19 +9,7 @@ import { useEffect, useState } from "react";
 import FolderNavigation from "@/components/home/FolderNavigation";
 import LayoutIcon from "@/components/home/LayoutIcon";
 import CardOptions from "@/components/home/CardOptions";
-
-type ImageType = {
-    s3_id: string;
-    name: string;
-    presignedUrl: string;
-    created_at: string;
-};
-
-type FolderType = {
-    name: string;
-    id: string;
-    parent?: string | null;
-};
+import type { ImageType, FolderType } from "@/custom-types";
 
 export default function FolderPage({ params }: { params: { id: string } }) {
     const supabase = createClientComponentClient();

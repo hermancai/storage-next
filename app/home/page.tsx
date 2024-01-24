@@ -8,18 +8,7 @@ import FolderCard from "@/components/home/FolderCard";
 import FolderCreate from "@/components/home/FolderCreate";
 import LayoutIcon from "@/components/home/LayoutIcon";
 import CardOptions from "@/components/home/CardOptions";
-
-type ImageType = {
-    s3_id: string;
-    name: string;
-    presignedUrl: string;
-    created_at: string;
-};
-
-type FolderType = {
-    name: string;
-    id: string;
-};
+import type { ImageType, FolderType } from "@/custom-types";
 
 export default function HomePage() {
     const supabase = createClientComponentClient();

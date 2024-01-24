@@ -19,13 +19,7 @@ import { Dialog } from "@headlessui/react";
 import TableCellWrapper from "./TableCellWrapper";
 import Thumbnail from "./Thumbnail";
 import ImageModal from "./ImageModal";
-
-type ImageType = {
-    s3_id: string;
-    name: string;
-    presignedUrl: string;
-    created_at: string;
-};
+import type { ImageType } from "@/custom-types";
 
 type ImageCardType = {
     image: ImageType;

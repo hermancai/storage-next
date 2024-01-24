@@ -10,11 +10,7 @@ import ErrorMessage from "../shared/ErrorMessage";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import RenameButton from "./RenameButton";
 import TableCellWrapper from "./TableCellWrapper";
-
-type FolderType = {
-    name: string;
-    id: string;
-};
+import type { FolderType } from "@/custom-types";
 
 type FolderCardType = {
     folder: FolderType;

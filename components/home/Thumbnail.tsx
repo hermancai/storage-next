@@ -1,11 +1,6 @@
 "use client";
 
-type ImageType = {
-    s3_id: string;
-    name: string;
-    presignedUrl: string;
-    created_at: string;
-};
+import type { ImageType } from "@/custom-types";
 
 type ThumbnailType = {
     image: ImageType;

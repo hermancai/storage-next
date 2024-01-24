@@ -3,12 +3,7 @@
 import { Fragment } from "react";
 import Link from "next/link";
 import { Menu, Transition } from "@headlessui/react";
-
-type FolderType = {
-    name: string;
-    id: string;
-    parent?: string | null;
-};
+import type { FolderType } from "@/custom-types";
 
 type FolderNavigationType = {
     folderPath: FolderType[];

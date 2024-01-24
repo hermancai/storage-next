@@ -1,13 +1,7 @@
 import { Dialog } from "@headlessui/react";
 import Modal from "../shared/Modal";
 import Image from "next/image";
-
-type ImageType = {
-    s3_id: string;
-    name: string;
-    presignedUrl: string;
-    created_at: string;
-};
+import type { ImageType } from "@/custom-types";
 
 type ImageModalType = {
     image: ImageType;

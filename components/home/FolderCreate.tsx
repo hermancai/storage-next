@@ -7,11 +7,7 @@ import SuccessToast from "../shared/SuccessToast";
 import { toast } from "react-toastify";
 import ErrorMessage from "../shared/ErrorMessage";
 import Modal from "../shared/Modal";
-
-type FolderType = {
-    name: string;
-    id: string;
-};
+import type { FolderType } from "@/custom-types";
 
 type FolderCreateType = {
     currentFolder: string;
