@@ -11,6 +11,8 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import RenameButton from "./RenameButton";
 import TableCellWrapper from "./TableCellWrapper";
 import type { FolderType } from "@/custom-types";
+import { toast } from "react-toastify";
+import SuccessToast from "../shared/SuccessToast";
 
 type FolderCardType = {
     folder: FolderType;
@@ -101,6 +103,7 @@ export default function FolderCard({
             return newList;
         });
         handleCloseRenameModal();
+        toast(<SuccessToast message="Folder renamed." />);
     };
 
     const deleteFolder = async () => {
@@ -124,6 +127,7 @@ export default function FolderCard({
         setNestedFolders((prevState) =>
             prevState.filter((entry) => entry.id !== folder.id)
         );
+        toast(<SuccessToast message="Folder deleted." />);
     };
 
     return (

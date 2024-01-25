@@ -1,7 +1,6 @@
 "use client";
 
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import Image from "next/image";
 import {
     Dispatch,
     SetStateAction,
@@ -20,6 +19,8 @@ import TableCellWrapper from "./TableCellWrapper";
 import Thumbnail from "./Thumbnail";
 import ImageModal from "./ImageModal";
 import type { ImageType } from "@/custom-types";
+import { toast } from "react-toastify";
+import SuccessToast from "../shared/SuccessToast";
 
 type ImageCardType = {
     image: ImageType;
@@ -118,6 +119,7 @@ export default function ImageCard({
         setCurrentImages((prevState) =>
             prevState.filter((entry) => entry.s3_id !== image.s3_id)
         );
+        toast(<SuccessToast message="Image deleted." />);
     };
 
     const renameImage = async () => {
@@ -159,6 +161,7 @@ export default function ImageCard({
             return newList;
         });
         handleCloseRenameModal();
+        toast(<SuccessToast message="Image renamed." />);
     };
 
     const getFullImage = async () => {
