@@ -1,12 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/navigation";
 import useGetUser from "@/hooks/useGetUser";
 import { Menu, Transition } from "@headlessui/react";
-import { Fragment } from "react";
+import { Fragment, useState } from "react";
 import LogoHomeLink from "../shared/LogoHomeLink";
 
 export default function Navbar() {
@@ -15,9 +14,12 @@ export default function Navbar() {
     const router = useRouter();
     const supabase = createClientComponentClient();
     const { user, loading: loadingUser } = useGetUser();
+    const [signoutLoading, setSignoutLoading] = useState(false);
 
     const handleSignOut = async () => {
+        setSignoutLoading(true);
         const { error } = await supabase.auth.signOut();
+        setSignoutLoading(false);
         if (error) {
             return console.log(error);
         }
@@ -152,7 +154,8 @@ export default function Navbar() {
                                         <Menu.Item>
                                             <button
                                                 onClick={handleSignOut}
-                                                className="whitespace-nowrap w-full px-4 py-2 rounded hover:bg-zinc-700 text-left flex flex-nowrap gap-2 items-center transition-colors"
+                                                disabled={signoutLoading}
+                                                className="whitespace-nowrap w-full px-4 py-2 rounded hover:bg-zinc-700 text-left flex flex-nowrap gap-2 items-center transition-colors disabled:text-zinc-500"
                                             >
                                                 <svg
                                                     xmlns="http://www.w3.org/2000/svg"
