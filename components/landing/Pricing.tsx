@@ -81,9 +81,9 @@ function PricingCard(props: PricingCardType) {
 export default function Pricing() {
     return (
         <div className="w-full flex flex-col justify-center items-center bg-zinc-800 px-4 pb-12">
-            <h3 className="text-zinc-100 text-3xl py-6">
+            <p className="text-zinc-100 text-3xl py-6">
                 &#8212; Pricing &#8212;
-            </h3>
+            </p>
             <div className="flex flex-col sm:flex-row items-end justify-center gap-4 text-slate-900 max-w-5xl w-full h-full">
                 <PricingCard
                     subtitle="Free"

@@ -28,6 +28,7 @@ export default function AboutPage() {
                     style={{
                         objectFit: "contain",
                     }}
+                    priority={true}
                 />
             </div>
         </div>

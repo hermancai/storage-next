@@ -41,7 +41,7 @@ export default function Navbar() {
                                 as="div"
                                 className="relative [display:inherit]"
                             >
-                                <Menu.Button>
+                                <Menu.Button aria-label="User Menu">
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
                                         fill="none"

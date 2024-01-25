@@ -33,6 +33,7 @@ export default function Hero() {
                         alt="photos"
                         fill
                         style={{ objectFit: "contain" }}
+                        priority={true}
                     />
                 </div>
             </div>

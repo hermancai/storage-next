@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import { PropsWithChildren } from "react";
 import LogoHomeLink from "./LogoHomeLink";
 
@@ -8,6 +7,7 @@ function FakeLink({ children }: PropsWithChildren) {
         <Link
             href="/about"
             className="p-1 rounded transition-colors text-zinc-100 hover:bg-zinc-700"
+            aria-label="Fake link to About page"
         >
             {children}
         </Link>

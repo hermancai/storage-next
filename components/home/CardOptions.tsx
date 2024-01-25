@@ -10,7 +10,7 @@ type CardOptionsType = {
 export default function CardOptions({ children }: CardOptionsType) {
     return (
         <Menu as="div" className="relative [display:inherit]" title="Options">
-            <Menu.Button>
+            <Menu.Button aria-label="Options">
                 <div className="rounded transition-colors hover:bg-zinc-900">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
