@@ -1,4 +1,8 @@
-import { DeleteObjectsCommand, ObjectIdentifier } from "@aws-sdk/client-s3";
+import {
+    DeleteObjectsCommand,
+    DeleteObjectsOutput,
+    ObjectIdentifier,
+} from "@aws-sdk/client-s3";
 import s3Client from "./s3Client";
 
 export default async function deleteFromS3Bucket(
@@ -19,7 +23,8 @@ export default async function deleteFromS3Bucket(
         Delete: { Objects: imageKeys },
     });
 
-    const res = await s3Client.send(command);
+    const res = (await s3Client.send(command)) as DeleteObjectsOutput;
+
     if (res.Errors) {
         console.log(res.Errors);
         throw new Error("Deleting from S3 failed.");
