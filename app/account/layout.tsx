@@ -13,7 +13,11 @@ export default async function AccountLayout({
     children: React.ReactNode;
 }) {
     const guestEmail = process.env.NEXT_PUBLIC_GUEST_EMAIL;
-    const supabase = createServerComponentClient({ cookies });
+
+    const cookieStore = cookies();
+    const supabase = createServerComponentClient({
+        cookies: () => cookieStore,
+    });
 
     const checkGuestUser = async () => {
         const { data, error } = await supabase.auth.getSession();

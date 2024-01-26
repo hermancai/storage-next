@@ -13,7 +13,8 @@ export async function POST(req: Request) {
         );
     }
 
-    const supabase = createRouteHandlerClient({ cookies });
+    const cookieStore = cookies();
+    const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
 
     // Data is list of image s3_id
     const imagesRes = await supabase.rpc("get_nested_images", { f_id: id });

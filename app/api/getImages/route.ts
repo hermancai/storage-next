@@ -8,7 +8,8 @@ import { GetObjectCommand } from "@aws-sdk/client-s3";
 export async function POST(req: Request) {
     const { folderId } = await req.json();
 
-    const supabase = createRouteHandlerClient({ cookies });
+    const cookieStore = cookies();
+    const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
     const {
         data: { session },
     } = await supabase.auth.getSession();
