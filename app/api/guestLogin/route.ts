@@ -6,7 +6,8 @@ export async function GET(req: Request) {
     const email = process.env.NEXT_PUBLIC_GUEST_EMAIL!;
     const password = process.env.GUEST_PASSWORD!;
 
-    const supabase = createRouteHandlerClient({ cookies });
+    const cookieStore = cookies();
+    const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
     const loginResponse = await supabase.auth.signInWithPassword({
         email,
         password,

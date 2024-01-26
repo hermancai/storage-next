@@ -20,7 +20,8 @@ export async function POST(req: Request) {
         return NextResponse.json({ error });
     }
 
-    const supabase = createRouteHandlerClient({ cookies });
+    const cookieStore = cookies();
+    const supabase = createRouteHandlerClient({ cookies: () => cookieStore });
     const {
         data: { session },
     } = await supabase.auth.getSession();

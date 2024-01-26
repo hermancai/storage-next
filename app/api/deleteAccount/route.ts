@@ -12,7 +12,10 @@ export async function POST(req: Request) {
     );
 
     // Get current user based on cookie
-    const routeSupabase = createRouteHandlerClient({ cookies });
+    const cookieStore = cookies();
+    const routeSupabase = createRouteHandlerClient({
+        cookies: () => cookieStore,
+    });
     const sessionResponse = await routeSupabase.auth.getSession();
     if (sessionResponse.error) {
         return NextResponse.json(
