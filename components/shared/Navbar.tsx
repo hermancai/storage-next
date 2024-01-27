@@ -23,7 +23,7 @@ export default function Navbar() {
         if (error) {
             return console.log(error);
         }
-        router.push("/");
+        window.location.reload();
     };
 
     return (
