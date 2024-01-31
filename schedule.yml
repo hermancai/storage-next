@@ -1,0 +1,12 @@
+name: Wake Supabase
+
+on:
+    schedule:
+        - cron: "43 5 */5 * *" # every 5 days at 5:43am
+
+jobs:
+    cron:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Wake Supabase
+              run: curl --request POST --url 'https://photosafe.vercel.app/api/healthcheck'
