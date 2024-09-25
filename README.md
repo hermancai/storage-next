@@ -1,6 +1,6 @@
 # PhotoSafe
 
-Cloud storage for images
+Cloud storage for images hosted at [photosafe.vercel.app](https://photosafe.vercel.app/)
 
 Built with Next.js, Amazon Web Services (S3), Supabase
 
@@ -25,6 +25,8 @@ BUCKET_REGION=
 AWS_ACCESS_KEY_ID=
 AWS_SECRET_ACCESS_KEY=
 ```
+
+A Mailgun SMTP server is linked to Supabase for sending emails. 
 
 ### Local Development
 
