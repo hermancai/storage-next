@@ -4,7 +4,6 @@ import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { User } from "@supabase/supabase-js";
 import { ChangeEvent, useState } from "react";
 import ErrorMessage from "../shared/ErrorMessage";
-import NonSSRWrapper from "../shared/NonSSRWrapper";
 import { toast } from "react-toastify";
 import SuccessToast from "../shared/SuccessToast";
 
@@ -123,51 +122,45 @@ export default function PasswordForm({ user }: UserFormProps) {
                 <label htmlFor="current-password" className="text-sm">
                     Current Password
                 </label>
-                <NonSSRWrapper>
-                    <input
-                        type="password"
-                        id="current-password"
-                        name="currentPassword"
-                        size={1}
-                        value={input.currentPassword}
-                        onChange={(e) => handleInputChange(e)}
-                        className="py-1 px-2 rounded bg-zinc-800 border border-zinc-500"
-                    />
-                </NonSSRWrapper>
+                <input
+                    type="password"
+                    id="current-password"
+                    name="currentPassword"
+                    size={1}
+                    value={input.currentPassword}
+                    onChange={(e) => handleInputChange(e)}
+                    className="py-1 px-2 rounded bg-zinc-800 border border-zinc-500"
+                />
                 <ErrorMessage message={error.currentPassword} />
             </div>
             <div className="flex flex-col gap-1">
                 <label htmlFor="new-password" className="text-sm">
                     New Password
                 </label>
-                <NonSSRWrapper>
-                    <input
-                        type="password"
-                        id="new-password"
-                        name="newPassword"
-                        size={1}
-                        value={input.newPassword}
-                        onChange={(e) => handleInputChange(e)}
-                        className="py-1 px-2 rounded bg-zinc-800 border border-zinc-500"
-                    />
-                </NonSSRWrapper>
+                <input
+                    type="password"
+                    id="new-password"
+                    name="newPassword"
+                    size={1}
+                    value={input.newPassword}
+                    onChange={(e) => handleInputChange(e)}
+                    className="py-1 px-2 rounded bg-zinc-800 border border-zinc-500"
+                />
                 <ErrorMessage message={error.newPassword} />
             </div>
             <div className="flex flex-col gap-1">
                 <label htmlFor="confirm-password" className="text-sm">
                     Confirm New Password
                 </label>
-                <NonSSRWrapper>
-                    <input
-                        type="password"
-                        id="confirm-password"
-                        name="confirmPassword"
-                        size={1}
-                        value={input.confirmPassword}
-                        onChange={(e) => handleInputChange(e)}
-                        className="py-1 px-2 rounded bg-zinc-800 border border-zinc-500"
-                    />
-                </NonSSRWrapper>
+                <input
+                    type="password"
+                    id="confirm-password"
+                    name="confirmPassword"
+                    size={1}
+                    value={input.confirmPassword}
+                    onChange={(e) => handleInputChange(e)}
+                    className="py-1 px-2 rounded bg-zinc-800 border border-zinc-500"
+                />
                 <ErrorMessage message={error.confirmPassword} />
             </div>
             <button

@@ -1,7 +1,6 @@
 "use client";
 
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import NonSSRWrapper from "../shared/NonSSRWrapper";
 import ErrorMessage from "../shared/ErrorMessage";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -46,16 +45,14 @@ export default function OTPInput({ email }: OTPInputType) {
                 <span className="font-bold">{email}</span>
             </p>
             <p>Enter the code to finish setting up your account.</p>
-            <NonSSRWrapper>
-                <input
-                    className="p-2 rounded bg-zinc-900 border border-zinc-500 text-center w-full"
-                    id="signup-code"
-                    type="text"
-                    placeholder="Verification Code"
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                />
-            </NonSSRWrapper>
+            <input
+                className="p-2 rounded bg-zinc-900 border border-zinc-500 text-center w-full"
+                id="signup-code"
+                type="text"
+                placeholder="Verification Code"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+            />
             {error === "" ? null : (
                 <div className="flex w-full justify-center">
                     <ErrorMessage message={error} />

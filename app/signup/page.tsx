@@ -4,7 +4,6 @@ import { useState, FormEvent, ChangeEvent } from "react";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import Link from "next/link";
 import ErrorMessage from "@/components/shared/ErrorMessage";
-import NonSSRWrapper from "@/components/shared/NonSSRWrapper";
 import OTPInput from "@/components/signup/OTPInput";
 import Footer from "@/components/shared/Footer";
 
@@ -152,46 +151,40 @@ export default function SignupPage() {
                     >
                         <div className="flex flex-col gap-1">
                             <label htmlFor="email">Email</label>
-                            <NonSSRWrapper>
-                                <input
-                                    type="text"
-                                    name="email"
-                                    id="email"
-                                    value={input.email}
-                                    onChange={(e) => handleChange(e)}
-                                    className="border border-zinc-500 rounded py-1 px-2 bg-zinc-900"
-                                />
-                            </NonSSRWrapper>
+                            <input
+                                type="text"
+                                name="email"
+                                id="email"
+                                value={input.email}
+                                onChange={(e) => handleChange(e)}
+                                className="border border-zinc-500 rounded py-1 px-2 bg-zinc-900"
+                            />
 
                             <ErrorMessage message={error.email} />
                         </div>
                         <div className="flex flex-col gap-1">
                             <label htmlFor="name">Username</label>
-                            <NonSSRWrapper>
-                                <input
-                                    type="text"
-                                    id="name"
-                                    name="name"
-                                    value={input.name}
-                                    onChange={(e) => handleChange(e)}
-                                    className="border border-zinc-500 rounded py-1 px-2 bg-zinc-900"
-                                />
-                            </NonSSRWrapper>
+                            <input
+                                type="text"
+                                id="name"
+                                name="name"
+                                value={input.name}
+                                onChange={(e) => handleChange(e)}
+                                className="border border-zinc-500 rounded py-1 px-2 bg-zinc-900"
+                            />
 
                             <ErrorMessage message={error.name} />
                         </div>
                         <div className="flex flex-col gap-1">
                             <label htmlFor="password">Password</label>
-                            <NonSSRWrapper>
-                                <input
-                                    type="password"
-                                    id="password"
-                                    name="password"
-                                    value={input.password}
-                                    onChange={(e) => handleChange(e)}
-                                    className="border border-zinc-500 rounded py-1 px-2 bg-zinc-900"
-                                />
-                            </NonSSRWrapper>
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                value={input.password}
+                                onChange={(e) => handleChange(e)}
+                                className="border border-zinc-500 rounded py-1 px-2 bg-zinc-900"
+                            />
 
                             <ErrorMessage message={error.password} />
                         </div>
@@ -199,16 +192,14 @@ export default function SignupPage() {
                             <label htmlFor="confirm-password">
                                 Confirm Password
                             </label>
-                            <NonSSRWrapper>
-                                <input
-                                    type="password"
-                                    id="confirm-password"
-                                    name="confirm"
-                                    value={input.confirm}
-                                    onChange={(e) => handleChange(e)}
-                                    className="border border-zinc-500 rounded py-1 px-2 bg-zinc-900"
-                                />
-                            </NonSSRWrapper>
+                            <input
+                                type="password"
+                                id="confirm-password"
+                                name="confirm"
+                                value={input.confirm}
+                                onChange={(e) => handleChange(e)}
+                                className="border border-zinc-500 rounded py-1 px-2 bg-zinc-900"
+                            />
 
                             <ErrorMessage message={error.confirm} />
                         </div>

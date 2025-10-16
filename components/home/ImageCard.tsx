@@ -1,13 +1,7 @@
 "use client";
 
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import {
-    Dispatch,
-    SetStateAction,
-    useCallback,
-    useMemo,
-    useState,
-} from "react";
+import { Dispatch, SetStateAction, useCallback, useState } from "react";
 import CardOptions from "./CardOptions";
 import DownloadButton from "./DownloadButton";
 import RenameButton from "./RenameButton";
@@ -87,14 +81,6 @@ export default function ImageCard({
         () => setOpenImageModal(false),
         []
     );
-
-    const imageCreatedAt = useMemo(() => {
-        return new Date(image.created_at).toLocaleString("en-US", {
-            month: "short",
-            day: "numeric",
-            year: "numeric",
-        });
-    }, [image.created_at]);
 
     const deleteImage = async () => {
         setDeleteError("");
@@ -221,9 +207,6 @@ export default function ImageCard({
                                 {image.name}
                             </span>
                         </div>
-                    </td>
-                    <td className="min-w-[90px] whitespace-nowrap">
-                        {imageCreatedAt}
                     </td>
                     <td className="p-1 [display:inherit]">
                         <CardOptions>
