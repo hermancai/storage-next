@@ -191,9 +191,6 @@ export default function HomePage() {
                                                 <th className="font-normal text-sm py-1 grow">
                                                     Name
                                                 </th>
-                                                <th className="font-normal text-sm py-1 w-[90px]">
-                                                    Date Added
-                                                </th>
                                                 <th>
                                                     <div className="px-1 invisible">
                                                         <CardOptions />
