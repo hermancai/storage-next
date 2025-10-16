@@ -4,7 +4,6 @@ import { useState } from "react";
 import { User } from "@supabase/supabase-js";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import ErrorMessage from "../shared/ErrorMessage";
-import NonSSRWrapper from "../shared/NonSSRWrapper";
 import SuccessToast from "../shared/SuccessToast";
 import { toast } from "react-toastify";
 
@@ -52,17 +51,14 @@ export default function UserForm({ user }: UserFormProps) {
                 <label htmlFor="change-username" className="text-sm">
                     New Username
                 </label>
-                <NonSSRWrapper>
-                    <input
-                        type="text"
-                        id="change-username"
-                        className="py-1 px-2 rounded bg-zinc-800 border border-zinc-500"
-                        value={newUsername}
-                        size={1}
-                        onChange={(e) => setNewUsername(e.target.value)}
-                    />
-                </NonSSRWrapper>
-
+                <input
+                    type="text"
+                    id="change-username"
+                    className="py-1 px-2 rounded bg-zinc-800 border border-zinc-500"
+                    value={newUsername}
+                    size={1}
+                    onChange={(e) => setNewUsername(e.target.value)}
+                />
                 <ErrorMessage message={error} />
             </div>
             <button

@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, FormEvent, ChangeEvent } from "react";
 import ErrorMessage from "@/components/shared/ErrorMessage";
-import NonSSRWrapper from "@/components/shared/NonSSRWrapper";
 import Footer from "@/components/shared/Footer";
 
 export default function LoginPage() {
@@ -85,31 +84,26 @@ export default function LoginPage() {
                 <h1 className="text-4xl">Log In</h1>
                 <div className="flex flex-col gap-1">
                     <label htmlFor="email">Email</label>
-                    <NonSSRWrapper>
-                        <input
-                            id="email"
-                            name="email"
-                            value={input.email}
-                            onChange={(e) => handleChange(e)}
-                            className="border border-zinc-500 rounded py-1 px-2 bg-zinc-900"
-                        />
-                    </NonSSRWrapper>
+                    <input
+                        id="email"
+                        name="email"
+                        value={input.email}
+                        onChange={(e) => handleChange(e)}
+                        className="border border-zinc-500 rounded py-1 px-2 bg-zinc-900"
+                    />
 
                     <ErrorMessage message={error.email} />
                 </div>
                 <div className="flex flex-col gap-1">
                     <label htmlFor="password">Password</label>
-                    <NonSSRWrapper>
-                        {" "}
-                        <input
-                            type="password"
-                            name="password"
-                            id="password"
-                            value={input.password}
-                            onChange={(e) => handleChange(e)}
-                            className="border border-zinc-500 rounded py-1 px-2 bg-zinc-900"
-                        />
-                    </NonSSRWrapper>
+                    <input
+                        type="password"
+                        name="password"
+                        id="password"
+                        value={input.password}
+                        onChange={(e) => handleChange(e)}
+                        className="border border-zinc-500 rounded py-1 px-2 bg-zinc-900"
+                    />
 
                     <ErrorMessage message={error.password} />
                 </div>

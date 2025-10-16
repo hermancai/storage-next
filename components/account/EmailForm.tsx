@@ -4,7 +4,6 @@ import { useState } from "react";
 import { User } from "@supabase/supabase-js";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import ErrorMessage from "../shared/ErrorMessage";
-import NonSSRWrapper from "../shared/NonSSRWrapper";
 import { toast } from "react-toastify";
 import SuccessToast from "../shared/SuccessToast";
 import SuccessMessage from "../shared/SuccessMessage";
@@ -73,16 +72,14 @@ export default function EmailForm({ user }: EmailFormProps) {
                 <label htmlFor="change-email" className="text-sm">
                     New Email
                 </label>
-                <NonSSRWrapper>
-                    <input
-                        type="text"
-                        id="change-email"
-                        className="py-1 px-2 rounded bg-zinc-800 border border-zinc-500"
-                        size={1}
-                        value={newEmail}
-                        onChange={(e) => setNewEmail(e.target.value)}
-                    />
-                </NonSSRWrapper>
+                <input
+                    type="text"
+                    id="change-email"
+                    className="py-1 px-2 rounded bg-zinc-800 border border-zinc-500"
+                    size={1}
+                    value={newEmail}
+                    onChange={(e) => setNewEmail(e.target.value)}
+                />
                 <ErrorMessage message={error} />
                 <SuccessMessage message={successMessage} />
             </div>
