@@ -1,24 +1,21 @@
 "use client";
 
 import Link from "next/link";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { useRouter } from "next/navigation";
 import useGetUser from "@/hooks/useGetUser";
 import { Menu, Transition } from "@headlessui/react";
 import { Fragment, useState } from "react";
-import LogoHomeLink from "../shared/LogoHomeLink";
+import LogoHomeLink from "@/components/shared/LogoHomeLink";
+import signOut from "@/lib/client/signOut";
 
 export default function Navbar() {
     const guestEmail = process.env.NEXT_PUBLIC_GUEST_EMAIL!;
 
-    const router = useRouter();
-    const supabase = createClientComponentClient();
     const { user, loading: loadingUser } = useGetUser();
     const [signoutLoading, setSignoutLoading] = useState(false);
 
     const handleSignOut = async () => {
         setSignoutLoading(true);
-        const { error } = await supabase.auth.signOut();
+        const { error } = await signOut();
         setSignoutLoading(false);
         if (error) {
             return console.log(error);

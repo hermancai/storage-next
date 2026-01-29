@@ -1,18 +1,20 @@
 "use client";
 
-import { Dispatch, SetStateAction, useCallback, useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import Link from "next/link";
-import DeleteButton from "./DeleteButton";
-import CardOptions from "./CardOptions";
-import Modal from "../shared/Modal";
+import DeleteButton from "@/components/home/DeleteButton";
+import CardOptions from "@/components/home/CardOptions";
+import RenameButton from "@/components/home/RenameButton";
+import TableCellWrapper from "@/components/home/TableCellWrapper";
+import Modal from "@/components/shared/Modal";
+import ErrorMessage from "@/components/shared/ErrorMessage";
+import SuccessToast from "@/components/shared/SuccessToast";
 import { Dialog } from "@headlessui/react";
-import ErrorMessage from "../shared/ErrorMessage";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import RenameButton from "./RenameButton";
-import TableCellWrapper from "./TableCellWrapper";
-import type { FolderType } from "@/custom-types";
+import { FolderType } from "@/types/components";
 import { toast } from "react-toastify";
-import SuccessToast from "../shared/SuccessToast";
+import renameFolder from "@/lib/client/renameFolder";
+import deleteFolder from "@/lib/actions/deleteFolder";
+import { usePathname } from "next/navigation";
 
 type FolderCardType = {
     folder: FolderType;
@@ -46,6 +48,8 @@ export default function FolderCard({
     setNestedFolders,
     showGrid,
 }: FolderCardType) {
+    const pathName = usePathname();
+
     const [openDeleteModal, setOpenDeleteModal] = useState(false);
     const [deleteError, setDeleteError] = useState("");
     const [deleteLoading, setDeleteLoading] = useState(false);
@@ -55,40 +59,28 @@ export default function FolderCard({
     const [renameLoading, setRenameLoading] = useState(false);
     const [openRenameModal, setOpenRenameModal] = useState(false);
 
-    const handleOpenRenameModal = useCallback(() => {
-        setOpenRenameModal(true);
-    }, []);
-    const handleOpenDeleteModal = useCallback(
-        () => setOpenDeleteModal(true),
-        []
-    );
-
-    const handleCloseRenameModal = useCallback(() => {
+    const handleCloseRenameModal = () => {
         setRenameInput("");
         setOpenRenameModal(false);
-    }, []);
-    const handleCloseDeleteModal = useCallback(
-        () => setOpenDeleteModal(false),
-        []
-    );
+    };
 
-    const renameFolder = async () => {
+    const handleRenameFolder = async () => {
         if (!renameInput.trim()) {
             return;
         }
 
         setRenameError("");
         setRenameLoading(true);
-
-        const supabase = createClientComponentClient();
-        const { error } = await supabase
-            .from("folder")
-            .update({ name: renameInput })
-            .eq("id", folder.id);
+        const renameResponse = await renameFolder(
+            renameInput,
+            folder.id,
+            pathName
+        );
         setRenameLoading(false);
-        if (error) {
+
+        if (!renameResponse.ok) {
             setRenameError("An unexpected error occurred.");
-            return console.log(error);
+            return console.log(renameResponse.error);
         }
 
         setRenameInput("");
@@ -106,22 +98,16 @@ export default function FolderCard({
         toast(<SuccessToast message="Folder renamed." />);
     };
 
-    const deleteFolder = async () => {
+    const handleDeleteFolder = async () => {
         setDeleteError("");
         setDeleteLoading(true);
-        const response = await fetch("/api/deleteFolder", {
-            method: "POST",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ id: folder.id }),
-        });
+
+        const deleteFolderResponse = await deleteFolder(folder.id, pathName);
+
         setDeleteLoading(false);
-        const res = await response.json();
-        if (res.error) {
+        if (!deleteFolderResponse.ok) {
             setDeleteError("An unexpected error occurred.");
-            return console.log(res.error);
+            return console.log(deleteFolderResponse.error);
         }
 
         setNestedFolders((prevState) =>
@@ -148,8 +134,12 @@ export default function FolderCard({
                             onClick={(e) => e.preventDefault()}
                         >
                             <CardOptions>
-                                <RenameButton onClick={handleOpenRenameModal} />
-                                <DeleteButton onClick={handleOpenDeleteModal} />
+                                <RenameButton
+                                    onClick={() => setOpenRenameModal(true)}
+                                />
+                                <DeleteButton
+                                    onClick={() => setOpenDeleteModal(true)}
+                                />
                             </CardOptions>
                         </div>
                     </Link>
@@ -170,8 +160,12 @@ export default function FolderCard({
                     </td>
                     <td className="p-1 [display:inherit]">
                         <CardOptions>
-                            <RenameButton onClick={handleOpenRenameModal} />
-                            <DeleteButton onClick={handleOpenDeleteModal} />
+                            <RenameButton
+                                onClick={() => setOpenRenameModal(true)}
+                            />
+                            <DeleteButton
+                                onClick={() => setOpenDeleteModal(true)}
+                            />
                         </CardOptions>
                     </td>
                 </tr>
@@ -207,7 +201,7 @@ export default function FolderCard({
                             </button>
                             <button
                                 className="px-2 py-1 rounded bg-zinc-900 text-zinc-100 transition-colors hover:bg-zinc-700 disabled:bg-slate-900"
-                                onClick={renameFolder}
+                                onClick={handleRenameFolder}
                                 disabled={renameLoading}
                             >
                                 Rename
@@ -217,7 +211,7 @@ export default function FolderCard({
                 </Modal>
                 <Modal
                     isOpen={openDeleteModal}
-                    onClose={handleCloseDeleteModal}
+                    onClose={() => setOpenDeleteModal(false)}
                 >
                     <Dialog.Panel className="flex flex-col gap-4 w-[90%] max-w-md transform overflow-hidden bg-white rounded p-4 sm:p-6 shadow-xl transition-all">
                         <p>
@@ -232,13 +226,13 @@ export default function FolderCard({
                         <div className="mt-1 flex justify-between w-full">
                             <button
                                 className="px-2 py-1 rounded border border-slate-700 text-slate-700 transition-colors hover:bg-slate-200"
-                                onClick={handleCloseDeleteModal}
+                                onClick={() => setOpenDeleteModal(false)}
                             >
                                 Cancel
                             </button>
                             <button
                                 className="px-2 py-1 rounded bg-red-600 text-white transition-colors hover:bg-red-700 disabled:bg-red-700"
-                                onClick={deleteFolder}
+                                onClick={handleDeleteFolder}
                                 disabled={deleteLoading}
                             >
                                 Delete

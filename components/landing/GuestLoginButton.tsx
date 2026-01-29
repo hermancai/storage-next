@@ -1,17 +1,18 @@
 "use client";
 
+import loginGuest from "@/lib/actions/loginGuest";
 import { useState } from "react";
 
 export default function GuestLoginButton() {
     const [loading, setLoading] = useState(false);
 
-    const loginGuest = async () => {
+    const handleLoginGuest = async () => {
         setLoading(true);
-        const loginRes = await fetch("/api/guestLogin", { method: "GET" });
+        const loginRes = await loginGuest();
         setLoading(false);
 
         if (!loginRes.ok) {
-            return console.log("Error logging in as guest");
+            return console.log(loginRes.error);
         }
 
         window.location.reload();
@@ -19,7 +20,7 @@ export default function GuestLoginButton() {
 
     return (
         <button
-            onClick={loginGuest}
+            onClick={handleLoginGuest}
             disabled={loading}
             className="flex flex-nowrap justify-center items-center gap-1 shadow py-2 px-3 rounded whitespace-nowrap bg-zinc-100 text-zinc-900 border border-zinc-900 transition-colors hover:bg-zinc-300"
         >

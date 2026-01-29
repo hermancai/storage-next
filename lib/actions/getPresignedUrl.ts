@@ -1,10 +1,14 @@
+"use server";
+
+import s3Client from "@/lib/aws/s3Client";
+import { normalizeError } from "@/lib/utility/normalizeError";
+import { PresignedUrlResponse } from "@/types/api";
 import { createPresignedPost } from "@aws-sdk/s3-presigned-post";
 import { v4 as uuidv4 } from "uuid";
-import s3Client from "../s3Client";
-import { NextResponse } from "next/server";
 
-export async function POST(req: Request) {
-    const { fileType } = await req.json();
+export default async function getPresignedUrl(
+    fileType: string
+): Promise<PresignedUrlResponse> {
     const s3_id = uuidv4() + "." + fileType;
 
     try {
@@ -14,14 +18,8 @@ export async function POST(req: Request) {
             Fields: { acl: "private", "Content-Type": "image/" + fileType },
             Conditions: [["starts-with", "$Content-Type", "image/"]],
         });
-        return NextResponse.json({
-            url,
-            fields,
-            s3_id,
-        });
+        return { ok: true, presignedUrl: url, fields, s3_id };
     } catch (err) {
-        return NextResponse.json({
-            error: "Requesting presigned URL from AWS failed.",
-        });
+        return { ok: false, error: normalizeError(err) };
     }
 }

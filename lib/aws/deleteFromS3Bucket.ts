@@ -3,7 +3,7 @@ import {
     DeleteObjectsOutput,
     ObjectIdentifier,
 } from "@aws-sdk/client-s3";
-import s3Client from "./s3Client";
+import s3Client from "@/lib/aws/s3Client";
 
 export default async function deleteFromS3Bucket(
     imageList: { s3_id: string }[]

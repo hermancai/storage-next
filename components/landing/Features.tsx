@@ -1,5 +1,3 @@
-import { PropsWithChildren } from "react";
-
 type FeatureType = {
     children: React.ReactNode;
     text: string;

@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { PropsWithChildren } from "react";
 
 export default function FoldersLayout({ children }: PropsWithChildren) {

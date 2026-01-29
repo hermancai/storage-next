@@ -2,19 +2,17 @@
 
 import { useState } from "react";
 import { User } from "@supabase/supabase-js";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import ErrorMessage from "../shared/ErrorMessage";
+import ErrorMessage from "@/components/shared/ErrorMessage";
+import SuccessToast from "@/components/shared/SuccessToast";
+import SuccessMessage from "@/components/shared/SuccessMessage";
 import { toast } from "react-toastify";
-import SuccessToast from "../shared/SuccessToast";
-import SuccessMessage from "../shared/SuccessMessage";
+import changeEmail from "@/lib/client/changeEmail";
 
 type EmailFormProps = {
     user: User | null;
 };
 
 export default function EmailForm({ user }: EmailFormProps) {
-    const supabase = createClientComponentClient();
-
     const [newEmail, setNewEmail] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
@@ -30,9 +28,7 @@ export default function EmailForm({ user }: EmailFormProps) {
         setError("");
         setSuccessMessage("");
         setLoading(true);
-        const { error: updateError } = await supabase.auth.updateUser({
-            email: newEmail.trim(),
-        });
+        const { error: updateError } = await changeEmail(newEmail.trim());
         setLoading(false);
 
         if (updateError) {

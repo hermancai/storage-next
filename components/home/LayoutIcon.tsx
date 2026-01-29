@@ -9,13 +9,9 @@ type LayoutIconType = {
 
 // If showGrid, icon should be bullet list for toggle
 export default function LayoutIcon({ showGrid, setShowGrid }: LayoutIconType) {
-    const handleClick = () => {
-        setShowGrid((prev) => !prev);
-    };
-
     return (
         <div
-            onClick={handleClick}
+            onClick={() => setShowGrid((prev) => !prev)}
             className="cursor-pointer rounded p-1 transition-colors hover:bg-zinc-700"
             title={showGrid ? "List Layout" : "Grid Layout"}
         >

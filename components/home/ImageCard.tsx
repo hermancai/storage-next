@@ -1,20 +1,25 @@
 "use client";
 
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { Dispatch, SetStateAction, useCallback, useState } from "react";
-import CardOptions from "./CardOptions";
-import DownloadButton from "./DownloadButton";
-import RenameButton from "./RenameButton";
-import DeleteButton from "./DeleteButton";
-import Modal from "../shared/Modal";
-import ErrorMessage from "../shared/ErrorMessage";
+import { Dispatch, SetStateAction, useState } from "react";
+import CardOptions from "@/components/home/CardOptions";
+import DownloadButton from "@/components/home/DownloadButton";
+import RenameButton from "@/components/home/RenameButton";
+import DeleteButton from "@/components/home/DeleteButton";
+import Thumbnail from "@/components/home/Thumbnail";
+import ImageModal from "@/components/home/ImageModal";
+import TableCellWrapper from "@/components/home/TableCellWrapper";
+import SuccessToast from "@/components/shared/SuccessToast";
+import Modal from "@/components/shared/Modal";
+import ErrorMessage from "@/components/shared/ErrorMessage";
 import { Dialog } from "@headlessui/react";
-import TableCellWrapper from "./TableCellWrapper";
-import Thumbnail from "./Thumbnail";
-import ImageModal from "./ImageModal";
-import type { ImageType } from "@/custom-types";
+import { ImageType } from "@/types/components";
 import { toast } from "react-toastify";
-import SuccessToast from "../shared/SuccessToast";
+import deleteImage from "@/lib/actions/deleteImage";
+import renameImage from "@/lib/client/renameImage";
+import getFullImage from "@/lib/actions/getFullImage";
+import { usePathname } from "next/navigation";
+import buildFileName from "@/lib/utility/buildFileName";
+import appendAndClickDownload from "@/lib/utility/appendAndClickDownload";
 
 type ImageCardType = {
     image: ImageType;
@@ -48,6 +53,8 @@ export default function ImageCard({
     setCurrentImages,
     showGrid,
 }: ImageCardType) {
+    const pathName = usePathname();
+
     const [renameInput, setRenameInput] = useState("");
     const [renameError, setRenameError] = useState("");
     const [renameLoading, setRenameLoading] = useState(false);
@@ -59,47 +66,21 @@ export default function ImageCard({
 
     const [openImageModal, setOpenImageModal] = useState(false);
 
-    const handleOpenRenameModal = useCallback(() => {
-        setOpenRenameModal(true);
-    }, []);
-    const handleCloseRenameModal = useCallback(() => {
+    const handleCloseRenameModal = () => {
         setRenameInput("");
         setOpenRenameModal(false);
-    }, []);
+    };
 
-    const handleOpenDeleteModal = useCallback(
-        () => setOpenDeleteModal(true),
-        []
-    );
-    const handleCloseDeleteModal = useCallback(
-        () => setOpenDeleteModal(false),
-        []
-    );
-
-    const handleOpenImageModal = useCallback(() => setOpenImageModal(true), []);
-    const handleCloseImageModal = useCallback(
-        () => setOpenImageModal(false),
-        []
-    );
-
-    const deleteImage = async () => {
+    const handleDeleteImage = async () => {
         setDeleteError("");
         setDeleteLoading(true);
-        const deleteResponse = await fetch("/api/deleteImage", {
-            method: "POST",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                s3_id: image.s3_id,
-            }),
-        });
-        const deleteRes = await deleteResponse.json();
+
+        const deleteImageRes = await deleteImage(image.s3_id, pathName);
         setDeleteLoading(false);
-        if (deleteRes.error) {
+
+        if (!deleteImageRes.ok) {
             setDeleteError("An unexpected error occurred.");
-            return console.log(deleteRes.error);
+            return console.log(deleteImageRes.error);
         }
 
         setCurrentImages((prevState) =>
@@ -108,7 +89,7 @@ export default function ImageCard({
         toast(<SuccessToast message="Image deleted." />);
     };
 
-    const renameImage = async () => {
+    const handleRenameImage = async () => {
         if (!renameInput.trim()) {
             return;
         }
@@ -116,23 +97,16 @@ export default function ImageCard({
         setRenameError("");
         setRenameLoading(true);
 
-        // Concat new file name with extension
-        const newFileName =
-            renameInput +
-            image.name.substring(
-                image.name.lastIndexOf("."),
-                image.name.length
-            );
-
-        const supabase = createClientComponentClient();
-        const { error } = await supabase
-            .from("image")
-            .update({ name: newFileName })
-            .eq("s3_id", image.s3_id);
+        const newFileName = buildFileName(image.name, renameInput);
+        const renameImageRes = await renameImage(
+            image.s3_id,
+            newFileName,
+            pathName
+        );
         setRenameLoading(false);
-        if (error) {
+        if (!renameImageRes.ok) {
             setRenameError("An unexpected error occurred.");
-            return console.log(error);
+            return console.log(renameImageRes.error);
         }
 
         setRenameInput("");
@@ -150,21 +124,13 @@ export default function ImageCard({
         toast(<SuccessToast message="Image renamed." />);
     };
 
-    const getFullImage = async () => {
-        const response = await fetch("api/getFullImage", {
-            method: "POST",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ s3_id: image.s3_id, name: image.name }),
-        });
-
-        const res = await response.json();
-        if (res.error) {
-            return console.log(res.error);
+    const handleGetFullImage = async () => {
+        const fullImageRes = await getFullImage(image.s3_id, image.name);
+        if (!fullImageRes.ok) {
+            return console.log(fullImageRes.error);
         }
-        window.open(res.url, "_blank");
+
+        appendAndClickDownload(fullImageRes.signedUrl, image.name);
     };
 
     return (
@@ -181,24 +147,28 @@ export default function ImageCard({
                         </p>
                         <div className="ml-auto [display:inherit] text-sm">
                             <CardOptions>
-                                <DownloadButton onClick={getFullImage} />
-                                <RenameButton onClick={handleOpenRenameModal} />
-                                <DeleteButton onClick={handleOpenDeleteModal} />
+                                <DownloadButton onClick={handleGetFullImage} />
+                                <RenameButton
+                                    onClick={() => setOpenRenameModal(true)}
+                                />
+                                <DeleteButton
+                                    onClick={() => setOpenDeleteModal(true)}
+                                />
                             </CardOptions>
                         </div>
                     </div>
                     <div
                         className="relative w-full aspect-square cursor-zoom-in"
-                        onClick={handleOpenImageModal}
+                        onClick={() => setOpenImageModal(true)}
                     >
-                        <Thumbnail image={image} />
+                        <Thumbnail {...image} />
                     </div>
                 </div>
             ) : (
                 <tr className="transition-colors hover:bg-zinc-700 flex items-center border-b border-zinc-500 text-sm pl-2 gap-2">
                     <td
                         className="grow overflow-hidden"
-                        onClick={handleOpenImageModal}
+                        onClick={() => setOpenImageModal(true)}
                         title={image.name}
                     >
                         <div className="flex flex-nowrap items-center gap-2 cursor-zoom-in py-1">
@@ -210,9 +180,13 @@ export default function ImageCard({
                     </td>
                     <td className="p-1 [display:inherit]">
                         <CardOptions>
-                            <DownloadButton onClick={getFullImage} />
-                            <RenameButton onClick={handleOpenRenameModal} />
-                            <DeleteButton onClick={handleOpenDeleteModal} />
+                            <DownloadButton onClick={handleGetFullImage} />
+                            <RenameButton
+                                onClick={() => setOpenRenameModal(true)}
+                            />
+                            <DeleteButton
+                                onClick={() => setOpenDeleteModal(true)}
+                            />
                         </CardOptions>
                     </td>
                 </tr>
@@ -248,7 +222,7 @@ export default function ImageCard({
                             </button>
                             <button
                                 className="px-2 py-1 rounded bg-zinc-900 text-zinc-100 transition-colors hover:bg-zinc-700 disabled:bg-slate-900"
-                                onClick={renameImage}
+                                onClick={handleRenameImage}
                                 disabled={renameLoading}
                             >
                                 Rename
@@ -258,7 +232,7 @@ export default function ImageCard({
                 </Modal>
                 <Modal
                     isOpen={openDeleteModal}
-                    onClose={handleCloseDeleteModal}
+                    onClose={() => setOpenDeleteModal(false)}
                 >
                     <Dialog.Panel className="flex flex-col gap-4 w-[90%] max-w-md transform overflow-hidden bg-white rounded p-4 sm:p-6 shadow-xl transition-all">
                         <p>
@@ -273,13 +247,13 @@ export default function ImageCard({
                         <div className="mt-1 flex justify-between w-full">
                             <button
                                 className="px-2 py-1 rounded border border-zinc-900 text-zinc-900 transition-colors hover:bg-zinc-200"
-                                onClick={handleCloseDeleteModal}
+                                onClick={() => setOpenDeleteModal(false)}
                             >
                                 Cancel
                             </button>
                             <button
                                 className="px-2 py-1 rounded bg-red-600 text-white transition-colors hover:bg-red-700 disabled:bg-red-700"
-                                onClick={deleteImage}
+                                onClick={handleDeleteImage}
                                 disabled={deleteLoading}
                             >
                                 Delete
@@ -290,7 +264,7 @@ export default function ImageCard({
                 <ImageModal
                     image={image}
                     isOpen={openImageModal}
-                    closeModal={handleCloseImageModal}
+                    closeModal={() => setOpenImageModal(false)}
                 />
             </TableCellWrapper>
         </>

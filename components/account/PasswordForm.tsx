@@ -1,19 +1,17 @@
 "use client";
 
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { User } from "@supabase/supabase-js";
 import { ChangeEvent, useState } from "react";
-import ErrorMessage from "../shared/ErrorMessage";
+import ErrorMessage from "@/components/shared/ErrorMessage";
+import SuccessToast from "@/components/shared/SuccessToast";
 import { toast } from "react-toastify";
-import SuccessToast from "../shared/SuccessToast";
+import changePassword from "@/lib/client/changePassword";
 
 type UserFormProps = {
     user: User | null;
 };
 
 export default function PasswordForm({ user }: UserFormProps) {
-    const supabase = createClientComponentClient();
-
     const [input, setInput] = useState({
         currentPassword: "",
         newPassword: "",
@@ -85,10 +83,10 @@ export default function PasswordForm({ user }: UserFormProps) {
     const handleChangePassword = async () => {
         if (!validateInput()) return;
 
-        const { error } = await supabase.rpc("change_user_password", {
-            current_plain_password: input.currentPassword,
-            new_plain_password: input.newPassword,
-        });
+        const { error } = await changePassword(
+            input.currentPassword,
+            input.newPassword
+        );
         if (error) {
             switch (error.message) {
                 case "incorrect password":
