@@ -1,14 +1,13 @@
 "use client";
 
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, FormEvent, ChangeEvent } from "react";
 import ErrorMessage from "@/components/shared/ErrorMessage";
 import Footer from "@/components/shared/Footer";
+import signInWithPassword from "@/lib/client/signInWithPassword";
 
 export default function LoginPage() {
-    const supabase = createClientComponentClient();
     const router = useRouter();
 
     const [input, setInput] = useState({ email: "", password: "" });
@@ -58,13 +57,10 @@ export default function LoginPage() {
         if (!validateInput()) return;
 
         setLoginLoading(true);
-        const { error } = await supabase.auth.signInWithPassword({
-            email: input.email,
-            password: input.password,
-        });
+        const signInRes = await signInWithPassword(input.email, input.password);
         setLoginLoading(false);
 
-        if (error) {
+        if (signInRes.error) {
             return setError((prev) => {
                 return {
                     ...prev,

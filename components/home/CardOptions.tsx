@@ -4,7 +4,7 @@ import { Menu, Transition } from "@headlessui/react";
 import { Fragment, ReactNode } from "react";
 
 type CardOptionsType = {
-    children?: ReactNode | undefined;
+    children?: ReactNode;
 };
 
 export default function CardOptions({ children }: CardOptionsType) {

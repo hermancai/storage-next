@@ -1,13 +1,14 @@
 "use client";
 
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
 import { Dialog } from "@headlessui/react";
-import SuccessToast from "../shared/SuccessToast";
+import SuccessToast from "@/components/shared/SuccessToast";
+import ErrorMessage from "@/components/shared/ErrorMessage";
+import Modal from "@/components/shared/Modal";
 import { toast } from "react-toastify";
-import ErrorMessage from "../shared/ErrorMessage";
-import Modal from "../shared/Modal";
-import type { FolderType } from "@/custom-types";
+import { FolderType } from "@/types/components";
+import createFolder from "@/lib/client/createFolder";
+import { usePathname } from "next/navigation";
 
 type FolderCreateType = {
     currentFolder: string;
@@ -18,34 +19,40 @@ export default function FolderCreate({
     currentFolder,
     setNestedFolders,
 }: FolderCreateType) {
-    const supabase = createClientComponentClient();
+    const pathName = usePathname();
 
     const [folderInput, setFolderInput] = useState("");
     const [openModal, setOpenModal] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
 
-    const handleFolderChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const handleFolderInputChange = (e: ChangeEvent<HTMLInputElement>) => {
         setFolderInput(e.target.value);
     };
 
-    const createFolder = async () => {
+    const handleCreateFolder = async () => {
         setError("");
         if (!folderInput.trim()) return;
 
         setLoading(true);
-        const { data, error } = await supabase
-            .from("folder")
-            .insert({ parent: currentFolder, name: folderInput })
-            .select("id, name");
+        const createFolderRes = await createFolder(
+            currentFolder,
+            folderInput,
+            pathName
+        );
         setLoading(false);
-        if (error) {
+
+        if (!createFolderRes.ok) {
             setError("An unexpected error occurred.");
-            return console.log(error);
+            return console.log(createFolderRes.error);
         }
+
         setNestedFolders((prevState) => [
             ...prevState,
-            { name: data[0].name, id: data[0].id },
+            {
+                name: createFolderRes.name,
+                id: createFolderRes.id,
+            },
         ]);
         setFolderInput("");
         setOpenModal(false);
@@ -90,7 +97,7 @@ export default function FolderCreate({
                         id="create-folder"
                         type="text"
                         value={folderInput}
-                        onChange={(e) => handleFolderChange(e)}
+                        onChange={(e) => handleFolderInputChange(e)}
                         placeholder="Folder Name"
                         className="px-2 py-1 border border-zinc-700 rounded"
                     />
@@ -104,7 +111,7 @@ export default function FolderCreate({
                         </button>
                         <button
                             className="px-2 py-1 rounded bg-zinc-900 text-zinc-100 transition-colors hover:bg-zinc-700 disabled:bg-slate-900"
-                            onClick={createFolder}
+                            onClick={handleCreateFolder}
                             disabled={loading}
                         >
                             Create

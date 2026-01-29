@@ -1,4 +1,4 @@
-import Navbar from "../components/shared/Navbar";
+import Navbar from "@/components/shared/Navbar";
 import "./globals.css";
 import type { Metadata } from "next";
 import { ToastContainer, Slide } from "react-toastify";
@@ -16,7 +16,7 @@ export default function RootLayout({
 }) {
     return (
         <html lang="en" className="h-full">
-            <body className="h-full flex flex-col">
+            <body className="h-full flex flex-col bg-zinc-900">
                 <Navbar />
                 {children}
                 <ToastContainer

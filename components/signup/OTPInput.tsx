@@ -1,9 +1,9 @@
 "use client";
 
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import ErrorMessage from "../shared/ErrorMessage";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { verifyOtp } from "@/lib/client/verifyOtp";
+import ErrorMessage from "@/components/shared/ErrorMessage";
 
 type OTPInputType = {
     email: string;
@@ -11,7 +11,6 @@ type OTPInputType = {
 
 export default function OTPInput({ email }: OTPInputType) {
     const router = useRouter();
-    const supabase = createClientComponentClient();
 
     const [input, setInput] = useState("");
     const [error, setError] = useState("");
@@ -24,12 +23,7 @@ export default function OTPInput({ email }: OTPInputType) {
         }
 
         setLoading(true);
-        const { data, error } = await supabase.auth.verifyOtp({
-            email,
-            token: input,
-            type: "signup",
-            options: { redirectTo: `${location.origin}/home` },
-        });
+        const { data, error } = await verifyOtp(email, input, location.origin);
         setLoading(false);
 
         if (error || !data.session) {

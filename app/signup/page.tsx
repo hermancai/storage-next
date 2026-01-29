@@ -1,11 +1,11 @@
 "use client";
 
 import { useState, FormEvent, ChangeEvent } from "react";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import Link from "next/link";
 import ErrorMessage from "@/components/shared/ErrorMessage";
 import OTPInput from "@/components/signup/OTPInput";
 import Footer from "@/components/shared/Footer";
+import signUp from "@/lib/client/signUp";
 
 export default function SignupPage() {
     const [input, setInput] = useState({
@@ -23,8 +23,6 @@ export default function SignupPage() {
     });
     const [showOTPInput, setshowOTPInput] = useState(false);
     const [signupLoading, setSignupLoading] = useState(false);
-
-    const supabase = createClientComponentClient();
 
     const validateInput = (): boolean => {
         let valid = true;
@@ -87,16 +85,7 @@ export default function SignupPage() {
         if (!validateInput()) return;
 
         setSignupLoading(true);
-
-        const signUpRes = await supabase.auth.signUp({
-            email: input.email,
-            password: input.password,
-            options: {
-                data: {
-                    name: input.name,
-                },
-            },
-        });
+        const signUpRes = await signUp(input.email, input.password, input.name);
         setSignupLoading(false);
 
         if (signUpRes.error) {

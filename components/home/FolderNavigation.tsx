@@ -3,7 +3,7 @@
 import { Fragment } from "react";
 import Link from "next/link";
 import { Menu, Transition } from "@headlessui/react";
-import type { FolderType } from "@/custom-types";
+import { FolderType } from "@/types/components";
 
 type FolderNavigationType = {
     folderPath: FolderType[];
@@ -38,7 +38,9 @@ function Chevron() {
 function FolderLink({ folder, active }: FolderLinkType) {
     return (
         <Link
-            href={`/home/folder/${folder.id}`}
+            href={
+                folder.parent === null ? "/home" : `/home/folder/${folder.id}`
+            }
             className={`px-2 py-1 rounded whitespace-nowrap overflow-hidden min-w-[50px] overflow-ellipsis ${
                 active
                     ? "text-zinc-100 underline cursor-default"
@@ -47,18 +49,6 @@ function FolderLink({ folder, active }: FolderLinkType) {
             title={folder.name}
         >
             {folder.name}
-        </Link>
-    );
-}
-
-function HomeLink() {
-    return (
-        <Link
-            href="/home"
-            className="px-2 py-1 rounded whitespace-nowrap overflow-hidden min-w-min overflow-ellipsis text-zinc-300 hover:text-zinc-100 transition-colors hover:bg-zinc-700"
-            title="Home"
-        >
-            Home
         </Link>
     );
 }
@@ -105,10 +95,7 @@ export default function FolderNavigation({ folderPath }: FolderNavigationType) {
                                 as="div"
                                 className="absolute left-0 top-9 border border-zinc-500 rounded p-1 bg-zinc-900 flex flex-col gap-1 text-zinc-100 origin-top-left max-w-[250px]"
                             >
-                                {folderPath.slice(2).map((folder) => {
-                                    if (folder.parent === null) {
-                                        return <HomeLink key={folder.id} />;
-                                    }
+                                {folderPath.slice(2).map((folder, i) => {
                                     return (
                                         <FolderLink
                                             key={folder.id}
@@ -122,13 +109,10 @@ export default function FolderNavigation({ folderPath }: FolderNavigationType) {
                 </>
             ) : (
                 folderPath.map((folder, i) => {
-                    if (folder.parent === null) {
-                        return <HomeLink key={folder.id} />;
-                    }
                     return (
                         <Fragment key={folder.id}>
                             <FolderLink folder={folder} active={i === 0} />
-                            <Chevron />
+                            {folder.parent && <Chevron />}
                         </Fragment>
                     );
                 })

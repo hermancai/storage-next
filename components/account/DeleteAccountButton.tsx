@@ -1,41 +1,34 @@
 "use client";
 
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/navigation";
 import { Dialog } from "@headlessui/react";
 import { useState } from "react";
-import Modal from "../shared/Modal";
+import Modal from "@/components/shared/Modal";
+import signOut from "@/lib/client/signOut";
+import deleteAccount from "@/lib/actions/deleteAccount";
 
 export default function DeleteAccountButton() {
     const router = useRouter();
-    const supabase = createClientComponentClient();
 
     const [openModal, setOpenModal] = useState(false);
     const [loading, setLoading] = useState(false);
 
     const handleDeleteAccount = async () => {
         setLoading(true);
-        const response = await fetch("/api/deleteAccount", {
-            method: "POST",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-            },
-        });
-        const res = await response.json();
+        const deleteAccountRes = await deleteAccount();
         setLoading(false);
 
-        if (res.error) {
+        if (!deleteAccountRes.ok) {
             setOpenModal(false);
             alert("An error occurred. Check the console for details.");
-            return console.log(res.error);
+            return console.log(deleteAccountRes.error);
         }
 
-        const { error } = await supabase.auth.signOut();
-        if (error) {
+        const signOutRes = await signOut();
+        if (signOutRes.error) {
             setOpenModal(false);
             alert("An error occurred. Check the console for details.");
-            return console.log(error);
+            return console.log(signOutRes.error);
         }
 
         router.push("/");

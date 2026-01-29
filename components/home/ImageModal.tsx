@@ -1,7 +1,7 @@
 import { Dialog } from "@headlessui/react";
-import Modal from "../shared/Modal";
+import Modal from "@/components/shared/Modal";
 import Image from "next/image";
-import type { ImageType } from "@/custom-types";
+import { ImageType } from "@/types/components";
 
 type ImageModalType = {
     image: ImageType;
@@ -48,7 +48,7 @@ export default function ImageModal({
                 </div>
                 <div className="relative h-full w-full">
                     <Image
-                        src={image.presignedUrl}
+                        src={image.signedUrl}
                         alt={image.name}
                         fill
                         style={{

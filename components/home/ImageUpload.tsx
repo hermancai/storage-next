@@ -1,11 +1,14 @@
 "use client";
 
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { ChangeEvent, Dispatch, SetStateAction, useRef, useState } from "react";
 import { toast } from "react-toastify";
-import SuccessToast from "../shared/SuccessToast";
-import ErrorToast from "../shared/ErrorToast";
-import type { ImageType } from "@/custom-types";
+import SuccessToast from "@/components/shared/SuccessToast";
+import ErrorToast from "@/components/shared/ErrorToast";
+import { ImageType } from "@/types/components";
+import getPresignedUrl from "@/lib/actions/getPresignedUrl";
+import getThumbnail from "@/lib/actions/getThumbnail";
+import { uploadToS3 } from "@/lib/client/uploadToS3";
+import addImageToSubabase from "@/lib/client/addImageToSupabase";
 
 type ImageUploadType = {
     setCurrentImages: Dispatch<SetStateAction<ImageType[]>>;
@@ -16,8 +19,6 @@ export default function ImageUpload({
     setCurrentImages,
     currentFolder,
 }: ImageUploadType) {
-    const supabase = createClientComponentClient();
-
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [loading, setLoading] = useState(false);
 
@@ -34,88 +35,46 @@ export default function ImageUpload({
         setLoading(false);
     };
 
+    const showErrorToast = (err: string | Response) => {
+        resetInput();
+        toast(<ErrorToast message="Upload failed." />);
+        console.log(err);
+        return;
+    };
+
     const uploadImage = async (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.files === null) return;
         const fileToUpload = e.target.files[0];
         setLoading(true);
 
-        // Request presigned URL for upload to s3
-        const urlRes = await fetch("/api/uploadImage", {
-            method: "POST",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                fileType: fileToUpload.name.split(".").pop(),
-            }),
-        });
-        const urlResponse = await urlRes.json();
-        if (urlResponse.error) {
-            resetInput();
-            toast(<ErrorToast message="Upload failed." />);
-            return console.log(urlResponse.error);
-        }
+        const presignRes = await getPresignedUrl(fileToUpload.name);
+        if (!presignRes.ok) return showErrorToast(presignRes.error);
 
-        // Upload to s3
-        const formData = new FormData();
-        Object.keys(urlResponse.fields).forEach((key) => {
-            formData.append(key, urlResponse.fields[key]);
-        });
-        formData.append("file", fileToUpload);
-        const s3Res = await fetch(urlResponse.url, {
-            method: "POST",
-            body: formData,
-        });
-        if (!s3Res.ok) {
-            resetInput();
-            toast(<ErrorToast message="Upload failed." />);
-            return console.log(s3Res);
-        }
+        const uploadRes = await uploadToS3(presignRes, fileToUpload);
+        if (!uploadRes.ok) return showErrorToast(uploadRes);
 
-        // Update supabase
-        const insertResponse = await supabase
-            .from("image")
-            .insert({
-                s3_id: urlResponse.s3_id,
-                name: fileToUpload.name,
-                folder_id: currentFolder,
-            })
-            .select("s3_id, created_at");
-        if (insertResponse.error) {
-            resetInput();
-            toast(<ErrorToast message="Upload failed." />);
-            return console.log(insertResponse.error);
-        }
+        const supabaseRes = await addImageToSubabase(
+            presignRes.s3_id,
+            fileToUpload.name,
+            currentFolder
+        );
+        if (!supabaseRes.ok) return showErrorToast(supabaseRes.error);
 
-        // Show image on current page
-        const getThumbResponse = await fetch("/api/getThumb", {
-            method: "POST",
-            headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                s3_id: insertResponse.data[0].s3_id,
-                name: fileToUpload.name,
-            }),
-        });
-        const getThumbRes = await getThumbResponse.json();
-        if (getThumbRes.error) {
-            resetInput();
-            toast(<ErrorToast message="Upload failed." />);
-            return console.log(getThumbRes.error);
-        }
+        const thumbnailRes = await getThumbnail(
+            supabaseRes.s3_id,
+            fileToUpload.name
+        );
+        if (!thumbnailRes.ok) return showErrorToast(thumbnailRes.error);
 
         setCurrentImages((prevState) => {
             return [
-                ...prevState,
                 {
-                    s3_id: insertResponse.data[0].s3_id,
+                    s3_id: supabaseRes.s3_id,
                     name: fileToUpload.name,
-                    presignedUrl: getThumbRes.presignedUrl,
-                    created_at: insertResponse.data[0].created_at,
+                    signedUrl: thumbnailRes.signedUrl,
+                    created_at: supabaseRes.created_at,
                 },
+                ...prevState,
             ];
         });
 

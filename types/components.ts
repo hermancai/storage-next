@@ -1,14 +1,12 @@
-type ImageType = {
+export type ImageType = {
     s3_id: string;
     name: string;
-    presignedUrl: string;
+    signedUrl: string;
     created_at: string;
 };
 
-type FolderType = {
+export type FolderType = {
     name: string;
     id: string;
     parent?: string | null;
 };
-
-export type { ImageType, FolderType };

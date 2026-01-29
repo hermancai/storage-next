@@ -9,7 +9,7 @@ export default function LogoHomeLink() {
         >
             <div className="relative h-10 w-10">
                 <Image
-                    src="images/logo.svg"
+                    src="/images/logo.svg"
                     alt="logo"
                     fill
                     style={{ objectFit: "contain" }}

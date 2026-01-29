@@ -2,18 +2,16 @@
 
 import { useState } from "react";
 import { User } from "@supabase/supabase-js";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import ErrorMessage from "../shared/ErrorMessage";
-import SuccessToast from "../shared/SuccessToast";
+import ErrorMessage from "@/components/shared/ErrorMessage";
+import SuccessToast from "@/components/shared/SuccessToast";
 import { toast } from "react-toastify";
+import changeUsername from "@/lib/client/changeUsername";
 
 type UserFormProps = {
     user: User | null;
 };
 
 export default function UserForm({ user }: UserFormProps) {
-    const supabase = createClientComponentClient();
-
     const [newUsername, setNewUsername] = useState("");
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
@@ -29,9 +27,7 @@ export default function UserForm({ user }: UserFormProps) {
 
         setError("");
         setLoading(true);
-        const { error: updateError } = await supabase.auth.updateUser({
-            data: { name: newUsername.trim() },
-        });
+        const { error: updateError } = await changeUsername(newUsername.trim());
         setLoading(false);
 
         if (updateError) {
